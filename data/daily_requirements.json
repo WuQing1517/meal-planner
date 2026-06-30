@@ -1,0 +1,7 @@
+{
+  "daily_requirements": {
+    "protein": {"min": 150.0},
+    "carbs": {"min": 250.0},
+    "fat": {"min": 44.0}
+  }
+}

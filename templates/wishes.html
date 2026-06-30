@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}许愿记录{% endblock %}
+
+{% block content %}
+<h2>许愿记录</h2>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">所有许愿</h5>
+        <span class="badge bg-primary">{{ wishes|length }} 条记录</span>
+    </div>
+    <div class="card-body">
+        {% if wishes %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>许愿内容</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for wish in wishes %}
+                    <tr>
+                        <td>{{ wish.time }}</td>
+                        <td>{{ wish.wish }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div style="font-size: 4rem;">🌟</div>
+            <p class="text-muted mt-3">暂无许愿记录</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">去许愿</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

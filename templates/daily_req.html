@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}每日需求配置{% endblock %}
+
+{% block content %}
+<h2>每日营养需求配置</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h5>设置每日最低营养需求（必须满足）</h5>
+    </div>
+    <div class="card-body">
+        {% if nutrients %}
+        <form method="POST" action="{{ url_for('daily_requirements_save') }}">
+            <div class="alert alert-warning">
+                <strong>说明：</strong>每日需求是全天总量的最低要求，必须满足。每餐的约束类型和优先级在"餐数配置"中设置。
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>营养物质</th>
+                        <th>单位</th>
+                        <th>每日最低需求</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nutrient in nutrients %}
+                    <tr>
+                        <td>{{ nutrient.name }}</td>
+                        <td>{{ nutrient.unit }}</td>
+                        <td>
+                            <input type="number" class="form-control"
+                                   name="{{ nutrient.id }}_min"
+                                   value="{{ requirements.get(nutrient.id, {}).get('min', '') }}"
+                                   step="0.1" min="0" placeholder="输入每日最低需求量">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">保存配置</button>
+        </form>
+        {% else %}
+        <p class="text-muted">请先添加营养物质。</p>
+        <a href="{{ url_for('nutrients_list') }}" class="btn btn-primary">添加营养物质</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>当前配置</h5>
+    </div>
+    <div class="card-body">
+        {% if requirements %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>营养物质</th>
+                    <th>每日最低需求</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nutrient in nutrients %}
+                {% set req = requirements.get(nutrient.id, {}) %}
+                <tr>
+                    <td>{{ nutrient.name }}</td>
+                    <td>{{ req.get('min', '-') }} {{ nutrient.unit }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">暂无配置。</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

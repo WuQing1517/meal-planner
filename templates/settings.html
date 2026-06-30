@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}系统设置{% endblock %}
+
+{% block content %}
+<h2>系统设置</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>背景图片设置</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">上传自定义背景图片，支持 JPG、PNG 格式。</p>
+
+                <form method="POST" action="{{ url_for('upload_bg') }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">选择背景图片</label>
+                        <input type="file" class="form-control" name="background" accept="image/*" id="bgInput">
+                    </div>
+                    <div class="mb-3">
+                        <img id="preview" src="#" alt="预览" style="max-width: 100%; border-radius: 8px; display: none;">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">上传背景</button>
+                        <form method="POST" action="{{ url_for('reset_bg') }}" style="display:inline;">
+                            <button type="submit" class="btn btn-secondary">恢复默认</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>当前背景预览</h5>
+            </div>
+            <div class="card-body">
+                <div style="background-image: url('/static/background.jpg'); background-size: cover; background-position: center; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <span class="badge bg-primary" style="font-size: 1.2rem;">当前背景效果</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('bgInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var preview = document.getElementById('preview');
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+{% endblock %}

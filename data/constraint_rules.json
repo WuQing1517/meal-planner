@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "protein": {
+      "hard_exceed": false,
+      "hard_reduce": true,
+      "exceed_priority": 2,
+      "reduce_priority": 1
+    },
+    "carbs": {
+      "hard_exceed": false,
+      "hard_reduce": true,
+      "exceed_priority": 2,
+      "reduce_priority": 1
+    },
+    "fat": {
+      "hard_exceed": false,
+      "hard_reduce": false,
+      "exceed_priority": 3,
+      "reduce_priority": 1
+    }
+  }
+}

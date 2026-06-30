@@ -1,0 +1,357 @@
+{
+  "meal_plans": [
+    {
+      "id": "plan1",
+      "name": "晨骑+晚间健身",
+      "meals": [
+        {
+          "id": "meal_1",
+          "name": "骑行前",
+          "time": "06:30",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 10.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 30.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 2.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_2",
+          "name": "骑行后早餐",
+          "time": "08:30",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 40.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 50.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 10.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_3",
+          "name": "午餐",
+          "time": "12:00",
+          "is_fixed": true,
+          "fixed_nutrients": {
+            "protein": 40.0,
+            "carbs": 80.0,
+            "fat": 25.0
+          },
+          "constraints": {}
+        },
+        {
+          "id": "meal_4",
+          "name": "加餐",
+          "time": "15:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 15.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 20.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 2.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_5",
+          "name": "健身前加餐",
+          "time": "19:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 15.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 30.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 2.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_6",
+          "name": "健身后加餐",
+          "time": "22:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 30.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 40.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 3.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "plan2",
+      "name": "无骑行+晚间健身",
+      "meals": [
+        {
+          "id": "meal_1",
+          "name": "早餐",
+          "time": "08:30",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 45.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 80.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 10.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_2",
+          "name": "午餐",
+          "time": "12:00",
+          "is_fixed": true,
+          "fixed_nutrients": {
+            "protein": 40.0,
+            "carbs": 80.0,
+            "fat": 25.0
+          },
+          "constraints": {}
+        },
+        {
+          "id": "meal_3",
+          "name": "加餐",
+          "time": "15:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 15.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 20.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 2.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_4",
+          "name": "健身前加餐",
+          "time": "19:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 15.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 30.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 2.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_5",
+          "name": "健身后加餐",
+          "time": "22:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 35.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 40.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 5.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "plan3",
+      "name": "傍晚骑行+晚间健身",
+      "meals": [
+        {
+          "id": "meal_1",
+          "name": "早餐",
+          "time": "08:30",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 50.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 70.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 12.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_2",
+          "name": "午餐",
+          "time": "12:00",
+          "is_fixed": true,
+          "fixed_nutrients": {
+            "protein": 40.0,
+            "carbs": 80.0,
+            "fat": 25.0
+          },
+          "constraints": {}
+        },
+        {
+          "id": "meal_3",
+          "name": "骑行前加餐",
+          "time": "15:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 20.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 40.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 2.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_4",
+          "name": "骑后练前过渡",
+          "time": "18:50",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 20.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 35.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 1.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        },
+        {
+          "id": "meal_5",
+          "name": "健身后加餐",
+          "time": "22:00",
+          "is_fixed": false,
+          "constraints": {
+            "protein": {
+              "value": 20.0,
+              "up": 1,
+              "down": 0
+            },
+            "carbs": {
+              "value": 25.0,
+              "up": 1,
+              "down": 0
+            },
+            "fat": {
+              "value": 4.0,
+              "up": 0,
+              "down": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

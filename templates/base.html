@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}备餐系统{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/misans@4.0/lib/normal/MiSans-Regular.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">备餐系统</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('nutrients_list') }}">营养物质</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('daily_requirements') }}">每日需求</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('constraint_rules') }}">约束规则</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('meals_list') }}">餐数配置</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('foods_list') }}">食品管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('plan_page') }}">生成配比</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('plan_history') }}">历史方案</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('settings') }}">设置</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-auto">
+                    <button class="btn btn-outline-light btn-sm" onclick="toggleTheme()" id="themeToggle">
+                        <span id="themeIcon">☀️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 主题切换
+        function getTheme() {
+            return localStorage.getItem('theme') || 'auto';
+        }
+
+        function setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            applyTheme(theme);
+        }
+
+        function applyTheme(theme) {
+            var body = document.body;
+            var icon = document.getElementById('themeIcon');
+
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                body.classList.remove('light-mode');
+                icon.textContent = '🌙';
+            } else if (theme === 'light') {
+                body.classList.add('light-mode');
+                body.classList.remove('dark-mode');
+                icon.textContent = '☀️';
+            } else {
+                // 自动模式
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    body.classList.add('dark-mode');
+                    body.classList.remove('light-mode');
+                    icon.textContent = '🌙';
+                } else {
+                    body.classList.add('light-mode');
+                    body.classList.remove('dark-mode');
+                    icon.textContent = '☀️';
+                }
+            }
+            // 切换主题后重新检查背景图片
+            checkCustomBg();
+        }
+
+        function toggleTheme() {
+            var current = getTheme();
+            if (current === 'auto') {
+                // 检测当前实际主题
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    setTheme('light');
+                } else {
+                    setTheme('dark');
+                }
+            } else if (current === 'dark') {
+                setTheme('light');
+            } else {
+                setTheme('dark');
+            }
+        }
+
+        // 初始化主题
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTheme(getTheme());
+        });
+
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            if (getTheme() === 'auto') {
+                applyTheme('auto');
+            }
+        });
+
+        // 检测自定义背景图片
+        function checkCustomBg() {
+            var img = new Image();
+            img.onload = function() {
+                document.documentElement.style.setProperty('--bg-image', 'url(/static/background.jpg?' + new Date().getTime() + ')');
+                document.body.style.backgroundImage = 'url(/static/background.jpg?' + new Date().getTime() + ')';
+            };
+            img.onerror = function() {
+                // 没有自定义背景，使用CSS默认
+                document.body.style.backgroundImage = '';
+            };
+            img.src = '/static/background.jpg?' + new Date().getTime();
+        }
+        checkCustomBg();
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

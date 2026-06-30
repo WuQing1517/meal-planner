@@ -1,0 +1,491 @@
+{% extends "base.html" %}
+
+{% block title %}备餐系统 - 首页{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron p-5 rounded position-relative">
+            <div class="position-absolute top-0 end-0 p-3 text-end">
+                <div style="font-size: 2.5rem; font-weight: 700;" id="currentTime"></div>
+                <div class="lead" id="currentDate"></div>
+                <div class="h5" id="currentWeekday"></div>
+                <!-- 每日许愿入口 -->
+                <div class="mt-3">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="wishInput" placeholder="写下今天的愿望..." style="max-width: 250px;">
+                        <button class="btn btn-light" onclick="saveWish()">许愿</button>
+                    </div>
+                    <div id="todayWish" class="mt-2" style="display: none;">
+                        <small>今日愿望：</small>
+                        <span id="savedWishText" class="fw-bold"></span>
+                    </div>
+                </div>
+            </div>
+            <h1 class="display-4">备餐系统</h1>
+            <p class="lead">智能营养配比，科学规划每一餐</p>
+            <hr class="my-4">
+            <p>通过线性规划算法，自动计算最优食品配比，满足您的每日营养需求。</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">营养物质管理</h5>
+                <p class="card-text flex-grow-1">定义和管理营养物质，如蛋白质、碳水化合物、脂肪等。</p>
+                <a href="{{ url_for('nutrients_list') }}" class="btn btn-primary mt-auto">进入管理</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">每日需求配置</h5>
+                <p class="card-text flex-grow-1">设置每日各种营养物质的需求量范围。</p>
+                <a href="{{ url_for('daily_requirements') }}" class="btn btn-primary mt-auto">进入配置</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">餐数配置</h5>
+                <p class="card-text flex-grow-1">配置不同的餐数方案，如3餐制、4餐制等。</p>
+                <a href="{{ url_for('meals_list') }}" class="btn btn-primary mt-auto">进入配置</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">食品管理</h5>
+                <p class="card-text flex-grow-1">添加和管理食品及其营养成分数据。</p>
+                <a href="{{ url_for('foods_list') }}" class="btn btn-primary mt-auto">进入管理</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">生成配比方案</h5>
+                <p class="card-text flex-grow-1">根据需求自动生成最优食品配比。</p>
+                <a href="{{ url_for('plan_page') }}" class="btn btn-success mt-auto">生成方案</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">历史方案</h5>
+                <p class="card-text flex-grow-1">查看和管理已生成的配比方案。</p>
+                <a href="{{ url_for('plan_history') }}" class="btn btn-secondary mt-auto">查看历史</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 许愿反馈模态框 -->
+<div class="modal fade" id="feedbackModal" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px; border: none;">
+            <div class="modal-body text-center py-4">
+                <div style="font-size: 3rem;">✨</div>
+                <h5 class="text-success mb-2">许愿成功！</h5>
+                <p class="mb-0" id="feedbackWishText" style="white-space: pre-line;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 隐藏的抽奖转盘界面 -->
+<div class="modal fade" id="secretModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+            <div class="modal-body text-center text-white p-5">
+                <h2 class="mb-4">🎉 恭喜小金同学触发彩蛋啦！</h2>
+                <p class="lead mb-4">点击转盘抽取你的专属奖励</p>
+                
+                <!-- 转盘 -->
+                <div class="position-relative d-inline-block mb-4">
+                    <div id="wheel" style="width: 300px; height: 300px; border-radius: 50%; background: conic-gradient(#ff6b6b 0% 16.67%, #feca57 16.67% 33.33%, #48dbfb 33.33% 50%, #ff9ff3 50% 66.67%, #54a0ff 66.67% 83.33%, #5f27cd 83.33% 100%); display: flex; align-items: center; justify-content: center; transition: transform 3s ease-out;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎡</div>
+                    </div>
+                    <!-- 指针 -->
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #fff;"></div>
+                </div>
+                
+                <!-- 奖品区域 -->
+                <div id="prizeResult" style="display: none;" class="mt-4">
+                    <div class="card" style="background: rgba(255,255,255,0.95); border: none;">
+                        <div class="card-body text-dark">
+                            <h3 id="prizeText" class="text-success mb-3"></h3>
+                            <p id="prizeDesc" class="mb-3"></p>
+                            <p class="text-muted small mb-3">友情提示：兑换需保存愿望+奖券截图才可以兑换哦</p>
+                            <button class="btn btn-primary" data-bs-dismiss="modal">太棒了！</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="spinBtn" class="btn btn-warning btn-lg mt-3" onclick="spinWheel()">开始抽奖</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 实时时间显示
+function updateTime() {
+    var now = new Date();
+    var hours = String(now.getHours()).padStart(2, '0');
+    var minutes = String(now.getMinutes()).padStart(2, '0');
+    var seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('currentTime').textContent = hours + ':' + minutes + ':' + seconds;
+
+    var year = now.getFullYear();
+    var month = String(now.getMonth() + 1).padStart(2, '0');
+    var day = String(now.getDate()).padStart(2, '0');
+    document.getElementById('currentDate').textContent = year + '年' + month + '月' + day + '日';
+
+    var weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    document.getElementById('currentWeekday').textContent = weekdays[now.getDay()];
+}
+
+// 每秒更新时间
+updateTime();
+setInterval(updateTime, 1000);
+
+// 许愿功能
+function saveWish() {
+    var wish = document.getElementById('wishInput').value.trim();
+    if (!wish) {
+        alert('请输入愿望');
+        return;
+    }
+
+    var today = new Date().toDateString();
+    
+    // 检查今日许愿次数（每天最多2个）
+    var wishCount = parseInt(localStorage.getItem('dailyWishCount_' + today) || '0');
+    if (wishCount >= 2) {
+        alert('今天已经许了2个愿望啦，明天再来吧！');
+        return;
+    }
+
+    var now = new Date();
+    var timeStr = now.getFullYear() + '年' + 
+                  String(now.getMonth() + 1).padStart(2, '0') + '月' + 
+                  String(now.getDate()).padStart(2, '0') + '日 ' +
+                  String(now.getHours()).padStart(2, '0') + ':' +
+                  String(now.getMinutes()).padStart(2, '0');
+
+    // 更新许愿次数
+    localStorage.setItem('dailyWishCount_' + today, wishCount + 1);
+
+    // 保存到localStorage
+    localStorage.setItem('dailyWish_' + today + '_' + wishCount, wish);
+
+    // 显示今日愿望
+    var wishes = [];
+    for (var i = 0; i < wishCount + 1; i++) {
+        var w = localStorage.getItem('dailyWish_' + today + '_' + i);
+        if (w) wishes.push(w);
+    }
+    wishes.push(wish);
+    localStorage.setItem('dailyWishes_' + today, JSON.stringify(wishes));
+    document.getElementById('savedWishText').textContent = wishes.join('、');
+    document.getElementById('todayWish').style.display = 'block';
+    document.getElementById('wishInput').value = '';
+
+    // 保存到本地服务器
+    fetch('/api/submit-wish', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({time: timeStr, wish: wish})
+    }).then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        console.log('许愿保存成功:', data);
+    }).catch(function(err) {
+        console.log('许愿保存失败:', err);
+    });
+
+    // 检测彩蛋：黄祖斌
+    if (wish.includes('黄祖斌')) {
+        // 检查是否是重复的愿望（已经触发过菜单）
+        var triggeredWishes = JSON.parse(localStorage.getItem('triggeredSecretWishes_' + today) || '[]');
+        
+        if (triggeredWishes.includes(wish)) {
+            // 重复的愿望，只给正向反馈，不触发菜单
+            getWishFeedback(wish);
+        } else if (canTriggerSecretToday()) {
+            // 新的愿望，触发菜单
+            triggeredWishes.push(wish);
+            localStorage.setItem('triggeredSecretWishes_' + today, JSON.stringify(triggeredWishes));
+            saveSecretTriggeredToday();
+            showSecretModal();
+        } else {
+            // 今天已经触发过菜单，只给正向反馈
+            getWishFeedback(wish);
+        }
+        return;
+    }
+
+    // 获取AI正向反馈
+    getWishFeedback(wish);
+}
+
+// 检查今天是否可以触发彩蛋
+function canTriggerSecretToday() {
+    var today = new Date().toDateString();
+    return !localStorage.getItem('secretTriggered_' + today);
+}
+
+// 记录今天已触发彩蛋
+function saveSecretTriggeredToday() {
+    var today = new Date().toDateString();
+    localStorage.setItem('secretTriggered_' + today, 'true');
+}
+
+// 显示隐藏的抽奖转盘界面
+function showSecretModal() {
+    // 重置转盘和按钮
+    document.getElementById('wheel').style.transform = 'rotate(0deg)';
+    document.getElementById('prizeResult').style.display = 'none';
+    document.getElementById('spinBtn').style.display = 'inline-block';
+    
+    var modal = new bootstrap.Modal(document.getElementById('secretModal'));
+    modal.show();
+}
+
+// 奖品列表（从后端加载）
+var prizes = [];
+
+// 加载奖品
+function loadPrizes() {
+    fetch('/api/prizes')
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        prizes = data;
+    });
+}
+loadPrizes();
+
+// 抽奖转盘逻辑
+var isSpinning = false;
+function spinWheel() {
+    if (isSpinning) return;
+    if (prizes.length === 0) {
+        alert('暂无奖品，请联系管理员');
+        return;
+    }
+    
+    // 检查是否有库存的奖品
+    var hasStock = prizes.some(function(p) { return p.stock > 0; });
+    if (!hasStock) {
+        alert('没有库存啦，快联系最好的崽崽添加库存吧！');
+        return;
+    }
+    
+    isSpinning = true;
+    var wheel = document.getElementById('wheel');
+    var spinBtn = document.getElementById('spinBtn');
+    spinBtn.disabled = true;
+    spinBtn.textContent = '抽奖中...';
+    
+    // 根据库存计算概率并选择奖品
+    var selectedPrize = selectPrizeByStock();
+    
+    if (selectedPrize === null) {
+        alert('没有库存啦，快联系最好的崽崽添加库存吧！');
+        spinBtn.disabled = false;
+        spinBtn.textContent = '开始抽奖';
+        isSpinning = false;
+        return;
+    }
+    
+    // 计算旋转角度
+    var prizeIndex = prizes.findIndex(function(p) { return p.name === selectedPrize.name; });
+    var rotation = 360 * 5 + (360 / prizes.length) * prizeIndex;
+    
+    wheel.style.transform = `rotate(${rotation}deg)`;
+    
+    // 3秒后显示结果
+    setTimeout(function() {
+        document.getElementById('prizeText').textContent = selectedPrize.icon + ' ' + selectedPrize.name;
+        document.getElementById('prizeDesc').textContent = selectedPrize.desc;
+        document.getElementById('prizeResult').style.display = 'block';
+        spinBtn.style.display = 'none';
+        isSpinning = false;
+    }, 3000);
+}
+
+// 根据库存选择奖品（库存越多概率越高）
+function selectPrizeByStock() {
+    // 只过滤库存>0的奖品
+    var availablePrizes = prizes.filter(function(p) {
+        return p.stock > 0;
+    });
+    
+    if (availablePrizes.length === 0) return null;
+    
+    // 计算总权重（权重等于库存数量）
+    var totalWeight = 0;
+    availablePrizes.forEach(function(p) {
+        totalWeight += p.stock;
+    });
+    
+    // 生成随机数
+    var random = Math.random() * totalWeight;
+    
+    // 根据权重选择奖品
+    var cumulative = 0;
+    for (var i = 0; i < availablePrizes.length; i++) {
+        cumulative += availablePrizes[i].stock;
+        if (random <= cumulative) {
+            // 找到原数组中的奖品并更新库存
+            var originalIndex = prizes.findIndex(function(p) { return p.name === availablePrizes[i].name; });
+            if (originalIndex !== -1 && prizes[originalIndex].stock > 0) {
+                prizes[originalIndex].stock--;
+                // 保存到后端
+                savePrizesToServer();
+            }
+            return availablePrizes[i];
+        }
+    }
+    
+    return availablePrizes[0];
+}
+
+// 保存奖品到服务器
+function savePrizesToServer() {
+    fetch('/api/prizes/save', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(prizes)
+    }).catch(function(err) {
+        console.log('保存奖品失败:', err);
+    });
+}
+
+// 获取许愿正向反馈
+function getWishFeedback(wish) {
+    // 禁用许愿按钮，防止重复点击
+    var wishBtn = document.querySelector('.jumbotron .btn');
+    if (wishBtn) {
+        wishBtn.disabled = true;
+        wishBtn.textContent = '生成中...';
+    }
+
+    fetch('/api/wish-feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({wish: wish})
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        // 恢复按钮
+        if (wishBtn) {
+            wishBtn.disabled = false;
+            wishBtn.textContent = '许愿';
+        }
+        
+        // 收到反馈后显示模态框
+        document.getElementById('feedbackWishText').textContent = data.feedback || '愿你的梦想都能实现！';
+        var modal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+        modal.show();
+        
+        // 5秒后自动关闭
+        setTimeout(function() {
+            modal.hide();
+        }, 5000);
+    })
+    .catch(function() {
+        // 恢复按钮
+        if (wishBtn) {
+            wishBtn.disabled = false;
+            wishBtn.textContent = '许愿';
+        }
+        
+        // 出错时也显示反馈
+        document.getElementById('feedbackWishText').textContent = '愿你的梦想都能实现！加油！';
+        var modal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+        modal.show();
+        setTimeout(function() {
+            modal.hide();
+        }, 5000);
+    });
+}
+
+// 显示许愿反馈模态框
+function showWishFeedback(wish) {
+    var modal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+    modal.show();
+    
+    // 3秒后自动关闭
+    setTimeout(function() {
+        modal.hide();
+    }, 3000);
+}
+
+// 页面加载时检查今日愿望
+function loadTodayWish() {
+    // 检查是否有重置标记
+    checkResetFlag();
+    
+    var today = new Date().toDateString();
+    var savedWishes = localStorage.getItem('dailyWishes_' + today);
+    if (savedWishes) {
+        try {
+            var wishes = JSON.parse(savedWishes);
+            document.getElementById('savedWishText').textContent = wishes.join('、');
+            document.getElementById('todayWish').style.display = 'block';
+        } catch(e) {
+            // 兼容旧格式
+            document.getElementById('savedWishText').textContent = savedWishes;
+            document.getElementById('todayWish').style.display = 'block';
+        }
+    }
+}
+
+// 检查重置标记
+function checkResetFlag() {
+    fetch('/api/reset-flag')
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        var lastReset = localStorage.getItem('lastResetTime');
+        if (lastReset !== data.reset_time) {
+            // 有重置，清除所有许愿相关数据
+            clearAllWishData();
+            localStorage.setItem('lastResetTime', data.reset_time);
+        }
+    }).catch(function() {});
+}
+
+// 清除所有许愿相关数据
+function clearAllWishData() {
+    var today = new Date().toDateString();
+    localStorage.removeItem('dailyWishCount_' + today);
+    localStorage.removeItem('dailyWishes_' + today);
+    localStorage.removeItem('secretTriggered_' + today);
+    localStorage.removeItem('triggeredSecretWishes_' + today);
+    
+    // 清除今天的愿望显示
+    document.getElementById('savedWishText').textContent = '';
+    document.getElementById('todayWish').style.display = 'none';
+}
+
+loadTodayWish();
+</script>
+{% endblock %}

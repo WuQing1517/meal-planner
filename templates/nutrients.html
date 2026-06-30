@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}营养物质管理{% endblock %}
+
+{% block content %}
+<h2>营养物质管理</h2>
+
+<!-- 添加营养物质表单 -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>添加营养物质</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('nutrients_add') }}">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">名称</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">单位</label>
+                    <input type="text" class="form-control" name="unit" value="g">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">描述</label>
+                    <input type="text" class="form-control" name="description">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-success w-100">添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 营养物质列表 -->
+<div class="card">
+    <div class="card-header">
+        <h5>营养物质列表</h5>
+    </div>
+    <div class="card-body">
+        {% if nutrients %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>单位</th>
+                    <th>描述</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nutrient in nutrients %}
+                <tr>
+                    <td>{{ nutrient.name }}</td>
+                    <td>{{ nutrient.unit }}</td>
+                    <td>{{ nutrient.description }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editNutrient('{{ nutrient.id }}', '{{ nutrient.name }}', '{{ nutrient.unit }}', '{{ nutrient.description }}')">编辑</button>
+                        <form method="POST" action="{{ url_for('nutrients_delete', nutrient_id=nutrient.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">暂无营养物质，请添加。</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 编辑模态框 -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" id="editForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">编辑营养物质</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">名称</label>
+                        <input type="text" class="form-control" name="name" id="editName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">单位</label>
+                        <input type="text" class="form-control" name="unit" id="editUnit">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">描述</label>
+                        <input type="text" class="form-control" name="description" id="editDescription">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function editNutrient(id, name, unit, description) {
+    document.getElementById('editForm').action = '/nutrients/edit/' + id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editUnit').value = unit;
+    document.getElementById('editDescription').value = description;
+    new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+</script>
+{% endblock %}

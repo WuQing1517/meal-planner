@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}餐数配置{% endblock %}
+
+{% block content %}
+<h2>餐数配置</h2>
+
+<div class="alert alert-info">
+    <strong>每餐营养约束说明：</strong>
+    <ul class="mb-0 mt-1">
+        <li><span class="badge bg-danger">硬性</span> 该餐必须满足，不参与排序</li>
+        <li><span class="badge bg-warning text-dark">可超出</span> 允许超出目标值，按优先级排序</li>
+        <li><span class="badge bg-secondary">可减少</span> 允许不足，按优先级排序</li>
+        <li><strong>优先级</strong>：数字越小越优先（1最优先），不同营养物质独立排序</li>
+    </ul>
+</div>
+
+<!-- 添加餐数方案 -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>添加餐数方案</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('meals_add') }}" id="addMealForm">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">方案名称</label>
+                    <input type="text" class="form-control" name="name" required placeholder="例如：3餐制、4餐制">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">餐数</label>
+                    <input type="number" class="form-control" name="meals_count" value="3" min="1" max="10" id="mealsCount">
+                </div>
+            </div>
+
+            <div id="mealsContainer"></div>
+
+            <button type="submit" class="btn btn-success">添加方案</button>
+        </form>
+    </div>
+</div>
+
+<!-- 已有方案列表 -->
+<div class="card">
+    <div class="card-header">
+        <h5>已有方案</h5>
+    </div>
+    <div class="card-body">
+        {% if plans %}
+        {% for plan in plans %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">{{ plan.name }}</h6>
+                <div>
+                    <button class="btn btn-sm btn-primary" onclick='editPlan({{ plan|tojson }})'>编辑</button>
+                    <form method="POST" action="{{ url_for('meals_delete', plan_id=plan.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                {% for meal in plan.meals %}
+                <div class="border rounded p-3 mb-2 {% if meal.is_fixed %}border-success{% endif %}">
+                    <div class="d-flex justify-content-between mb-2">
+                        <strong>
+                            {{ meal.name }}
+                            {% if meal.is_fixed %}
+                            <span class="badge bg-success ms-2">固定餐</span>
+                            {% endif %}
+                        </strong>
+                        <span class="text-muted">{{ meal.time }}</span>
+                    </div>
+                    {% if meal.is_fixed and meal.fixed_nutrients %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for nutrient_id, value in meal.fixed_nutrients.items() %}
+                        <span class="badge bg-success">{{ nutrient_names.get(nutrient_id, nutrient_id) }}: {{ value }}</span>
+                        {% endfor %}
+                    </div>
+                    {% elif meal.constraints %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for nutrient_id, constraint in meal.constraints.items() %}
+                        <span class="badge bg-primary">
+                            {{ nutrient_names.get(nutrient_id, nutrient_id) }}: {{ constraint.get('value', 0) }}g
+                            {% if constraint.get('up', 0) > 0 %}+{{ constraint.get('up', 0) }}%{% endif %}
+                            {% if constraint.get('down', 0) > 0 %}-{{ constraint.get('down', 0) }}%{% endif %}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <span class="text-muted">无约束</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">暂无餐数方案，请添加。</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 编辑模态框 -->
+<div class="modal fade" id="editPlanModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="POST" id="editPlanForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">编辑餐数方案</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">方案名称</label>
+                        <input type="text" class="form-control" name="name" id="editPlanName" required>
+                    </div>
+                    <div id="editMealsContainer"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const nutrients = {{ nutrients | tojson }};
+
+document.getElementById('mealsCount').addEventListener('change', function() {
+    generateMealInputs(parseInt(this.value), 'mealsContainer', 'meal_');
+});
+
+function generateMealInputs(count, containerId, prefix) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    const defaultNames = ['早餐', '午餐', '晚餐', '加餐1', '加餐2', '加餐3', '加餐4', '加餐5', '加餐6', '加餐7'];
+
+    for (let i = 0; i < count; i++) {
+        const mealDiv = document.createElement('div');
+        mealDiv.className = 'card mb-3';
+        mealDiv.id = `${prefix}card-${i}`;
+
+        let nutrientFields = '';
+        nutrients.forEach(n => {
+            nutrientFields += `
+                <div class="col-md-3 mb-2">
+                    <label class="form-label small">${n.name} (${n.unit})</label>
+                    <div class="constraint-mode" id="${prefix}constraint_${i}_${n.id}">
+                        <input type="number" class="form-control form-control-sm mb-1"
+                               name="${prefix}${i}_nutrient_${n.id}_value"
+                               step="0.1" min="0" placeholder="固定值">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">上浮</span>
+                            <input type="number" class="form-control" name="${prefix}${i}_nutrient_${n.id}_up"
+                                   step="1" min="0" max="100" placeholder="%" value="0">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="input-group input-group-sm mt-1">
+                            <span class="input-group-text">下浮</span>
+                            <input type="number" class="form-control" name="${prefix}${i}_nutrient_${n.id}_down"
+                                   step="1" min="0" max="100" placeholder="%" value="0">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <div class="fixed-mode d-none" id="${prefix}fixed_${i}_${n.id}">
+                        <input type="number" class="form-control form-control-sm"
+                               name="${prefix}${i}_nutrient_${n.id}_fixed"
+                               step="0.1" min="0" placeholder="固定摄入量">
+                    </div>
+                </div>
+            `;
+        });
+
+        mealDiv.innerHTML = `
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control form-control-sm" name="${prefix}${i}_name"
+                               value="${defaultNames[i] || '第' + (i+1) + '餐'}" placeholder="餐次名称">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="time" class="form-control form-control-sm" name="${prefix}${i}_time">
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="${prefix}is_fixed_${i}"
+                                   name="${prefix}${i}_is_fixed" value="1" onchange="toggleFixedMode('${prefix}', ${i})">
+                            <label class="form-check-label small" for="${prefix}is_fixed_${i}">固定餐</label>
+                        </div>
+                        <small class="text-muted d-block" id="${prefix}fixed_hint_${i}">不参与排餐，营养计入全天</small>
+                    </div>
+                    <div class="col-md-5">
+                        <small class="text-muted" id="${prefix}mode_hint_${i}">设置营养约束</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    ${nutrientFields}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(mealDiv);
+    }
+}
+
+function toggleNutrientMode(prefix, mealIndex, nutrientId, mode) {
+    const rangeDiv = document.getElementById(`${prefix}range_${mealIndex}_${nutrientId}`);
+    const priorityDiv = document.getElementById(`${prefix}priority_${mealIndex}_${nutrientId}`);
+
+    if (mode === 'none') {
+        rangeDiv.classList.add('d-none');
+    } else if (mode === 'hard') {
+        rangeDiv.classList.remove('d-none');
+        priorityDiv.classList.add('d-none');
+    } else {
+        rangeDiv.classList.remove('d-none');
+        priorityDiv.classList.remove('d-none');
+    }
+}
+
+function toggleFixedMode(prefix, index) {
+    const isFixed = document.getElementById(`${prefix}is_fixed_${index}`).checked;
+    const card = document.getElementById(`${prefix}card-${index}`);
+
+    nutrients.forEach(n => {
+        const constraintDiv = document.getElementById(`${prefix}constraint_${index}_${n.id}`);
+        const fixedDiv = document.getElementById(`${prefix}fixed_${index}_${n.id}`);
+
+        if (isFixed) {
+            constraintDiv.classList.add('d-none');
+            fixedDiv.classList.remove('d-none');
+            card.classList.add('border-success');
+        } else {
+            constraintDiv.classList.remove('d-none');
+            fixedDiv.classList.add('d-none');
+            card.classList.remove('border-success');
+        }
+    });
+}
+
+generateMealInputs(3, 'mealsContainer', 'meal_');
+
+function editPlan(plan) {
+    document.getElementById('editPlanForm').action = '/meals/edit/' + plan.id;
+    document.getElementById('editPlanName').value = plan.name;
+
+    const container = document.getElementById('editMealsContainer');
+    container.innerHTML = '';
+
+    plan.meals.forEach((meal, i) => {
+        const mealDiv = document.createElement('div');
+        mealDiv.className = 'card mb-3';
+        mealDiv.id = `edit_card_${i}`;
+        if (meal.is_fixed) mealDiv.classList.add('border-success');
+
+        let nutrientFields = '';
+        nutrients.forEach(n => {
+            const isFixed = meal.is_fixed;
+            const constraint = meal.constraints ? (meal.constraints[n.id] || {}) : {};
+            const fixedVal = meal.fixed_nutrients ? (meal.fixed_nutrients[n.id] || '') : '';
+            const value = constraint.value || '';
+            const up = constraint.up || 0;
+            const down = constraint.down || 0;
+
+            nutrientFields += `
+                <div class="col-md-3 mb-2">
+                    <label class="form-label small">${n.name} (${n.unit})</label>
+                    <div class="constraint-mode ${isFixed ? 'd-none' : ''}" id="edit_constraint_${i}_${n.id}">
+                        <input type="number" class="form-control form-control-sm mb-1"
+                               name="edit_${i}_nutrient_${n.id}_value"
+                               step="0.1" min="0" placeholder="固定值" value="${value}">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">上浮</span>
+                            <input type="number" class="form-control" name="edit_${i}_nutrient_${n.id}_up"
+                                   step="1" min="0" max="100" placeholder="%" value="${up}">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="input-group input-group-sm mt-1">
+                            <span class="input-group-text">下浮</span>
+                            <input type="number" class="form-control" name="edit_${i}_nutrient_${n.id}_down"
+                                   step="1" min="0" max="100" placeholder="%" value="${down}">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <div class="fixed-mode ${isFixed ? '' : 'd-none'}" id="edit_fixed_${i}_${n.id}">
+                        <input type="number" class="form-control form-control-sm"
+                               name="edit_${i}_nutrient_${n.id}_fixed"
+                               step="0.1" min="0" placeholder="固定摄入量" value="${fixedVal}">
+                    </div>
+                </div>
+            `;
+        });
+
+        mealDiv.innerHTML = `
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control form-control-sm" name="edit_${i}_name"
+                               value="${meal.name}" placeholder="餐次名称">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="time" class="form-control form-control-sm" name="edit_${i}_time"
+                               value="${meal.time || ''}">
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="edit_is_fixed_${i}"
+                                   name="edit_${i}_is_fixed" value="1"
+                                   ${meal.is_fixed ? 'checked' : ''}
+                                   onchange="toggleFixedMode('edit_', ${i})">
+                            <label class="form-check-label small" for="edit_is_fixed_${i}">固定餐</label>
+                        </div>
+                        <small class="text-muted d-block" id="edit_fixed_hint_${i}">不参与排餐，营养计入全天</small>
+                    </div>
+                    <div class="col-md-5">
+                        <small class="text-muted" id="edit_mode_hint_${i}">设置营养约束</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    ${nutrientFields}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(mealDiv);
+    });
+
+    new bootstrap.Modal(document.getElementById('editPlanModal')).show();
+}
+</script>
+{% endblock %}
