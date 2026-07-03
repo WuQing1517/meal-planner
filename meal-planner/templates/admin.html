@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}后台管理{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>后台管理</h2>
+    <a href="{{ url_for('admin_logout') }}" class="btn btn-secondary">退出登录</a>
+</div>
+
+<!-- 导航标签 -->
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prizesTab">奖品配置</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#wishesTab">许愿记录</button>
+    </li>
+</ul>
+
+<!-- 奖品配置 -->
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="prizesTab">
+        <!-- 添加奖品区域 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>添加奖品</h5>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-end">
+                    <div class="col-md-1">
+                        <label class="form-label">图标</label>
+                        <input type="text" class="form-control" id="newPrizeIcon" value="🎁" placeholder="emoji">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">奖品类型</label>
+                        <input type="text" class="form-control" id="newPrizeName" placeholder="奖品名称">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">奖品描述</label>
+                        <input type="text" class="form-control" id="newPrizeDesc" placeholder="奖品描述">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">数量</label>
+                        <input type="number" class="form-control" id="newPrizeStock" value="1" min="1">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-success w-100" onclick="addPrize()">添加到奖品库</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 奖品库 -->
+        <div class="card">
+            <div class="card-header">
+                <h5>奖品库</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>图标</th>
+                                <th>奖品类型</th>
+                                <th>奖品描述</th>
+                                <th>库存</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prizesBody">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6>奖品种类</h6>
+                                <h3 id="totalTypes">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6>奖品总数</h6>
+                                <h3 id="totalStock">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6>可抽奖品</h6>
+                                <h3 id="availableCount">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 许愿记录 -->
+    <div class="tab-pane fade" id="wishesTab">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>重置许愿</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">点击重置按钮将清空所有许愿记录和许愿菜单触发记录，所有用户可以重新许愿和触发菜单。</p>
+                <button class="btn btn-danger" onclick="resetAllWishes()">重置许愿</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>许愿记录管理</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>时间</th>
+                                <th>许愿内容</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wishesBody"></tbody>
+                    </table>
+                </div>
+                <p class="text-muted" id="noWishesMsg" style="display: none;">暂无许愿记录</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ========== 奖品管理 ==========
+var prizes = [];
+
+function loadPrizes() {
+    fetch('/api/prizes')
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        prizes = data;
+        renderPrizes();
+    });
+}
+
+function renderPrizes() {
+    var tbody = document.getElementById('prizesBody');
+    tbody.innerHTML = '';
+    
+    var totalTypes = prizes.length;
+    var totalStock = 0;
+    var availableCount = 0;
+    
+    prizes.forEach(function(prize, index) {
+        totalStock += prize.stock || 0;
+        if (prize.stock > 0) availableCount++;
+        
+        var row = '<tr>' +
+            '<td style="font-size: 1.5rem;">' + (prize.icon || '🎁') + '</td>' +
+            '<td>' + (prize.name || '未命名') + '</td>' +
+            '<td>' + (prize.desc || '') + '</td>' +
+            '<td><span class="badge bg-' + (prize.stock > 0 ? 'success' : 'secondary') + '">' + (prize.stock || 0) + '</span></td>' +
+            '<td>' +
+                '<button class="btn btn-sm btn-outline-primary me-1" onclick="editPrizeStock(' + index + ')">修改库存</button>' +
+                '<button class="btn btn-sm btn-danger" onclick="removePrize(' + index + ')">删除</button>' +
+            '</td>' +
+        '</tr>';
+        tbody.innerHTML += row;
+    });
+    
+    document.getElementById('totalTypes').textContent = totalTypes;
+    document.getElementById('totalStock').textContent = totalStock;
+    document.getElementById('availableCount').textContent = availableCount;
+}
+
+function addPrize() {
+    var icon = document.getElementById('newPrizeIcon').value.trim();
+    var name = document.getElementById('newPrizeName').value.trim();
+    var desc = document.getElementById('newPrizeDesc').value.trim();
+    var stock = parseInt(document.getElementById('newPrizeStock').value) || 1;
+    
+    if (!name) {
+        alert('请输入奖品类型');
+        return;
+    }
+    
+    prizes.push({
+        icon: icon || '🎁',
+        name: name,
+        desc: desc,
+        stock: stock
+    });
+    
+    // 清空输入框
+    document.getElementById('newPrizeIcon').value = '🎁';
+    document.getElementById('newPrizeName').value = '';
+    document.getElementById('newPrizeDesc').value = '';
+    document.getElementById('newPrizeStock').value = '1';
+    
+    renderPrizes();
+    savePrizes();
+}
+
+function editPrizeStock(index) {
+    var newStock = prompt('请输入新的库存数量:', prizes[index].stock);
+    if (newStock !== null) {
+        prizes[index].stock = parseInt(newStock) || 0;
+        renderPrizes();
+        savePrizes();
+    }
+}
+
+function removePrize(index) {
+    prizes.splice(index, 1);
+    renderPrizes();
+    savePrizes();
+}
+
+function savePrizes() {
+    fetch('/api/prizes/save', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(prizes)
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        console.log('保存结果:', data);
+    });
+}
+
+// ========== 许愿记录管理 ==========
+var wishes = [];
+
+function loadWishes() {
+    fetch('/api/wishes')
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        wishes = data;
+        renderWishes();
+    });
+}
+
+function renderWishes() {
+    var tbody = document.getElementById('wishesBody');
+    var noMsg = document.getElementById('noWishesMsg');
+    
+    if (wishes.length === 0) {
+        tbody.innerHTML = '';
+        noMsg.style.display = 'block';
+        return;
+    }
+    
+    noMsg.style.display = 'none';
+    tbody.innerHTML = '';
+    
+    wishes.forEach(function(wish, index) {
+        var row = '<tr>' +
+            '<td>' + (index + 1) + '</td>' +
+            '<td>' + wish.time + '</td>' +
+            '<td>' + wish.wish + '</td>' +
+            '<td><button class="btn btn-sm btn-danger" onclick="deleteWish(' + index + ')">删除</button></td>' +
+        '</tr>';
+        tbody.innerHTML += row;
+    });
+}
+
+function deleteWish(index) {
+    // 获取要删除的愿望内容
+    var wishToDelete = wishes[index];
+    
+    fetch('/api/wishes/delete', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({index: index})
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (data.status === 'ok') {
+            // 清除localStorage中的今日愿望（如果匹配）
+            var today = new Date().toDateString();
+            var todayWish = localStorage.getItem('dailyWish_' + today);
+            if (todayWish && todayWish === wishToDelete.wish) {
+                localStorage.removeItem('dailyWish_' + today);
+            }
+            
+            wishes.splice(index, 1);
+            renderWishes();
+        }
+    });
+}
+
+// 初始化
+loadPrizes();
+loadWishes();
+
+// 重置所有许愿
+function resetAllWishes() {
+    if (!confirm('确定要重置所有许愿吗？这将清空所有许愿记录和菜单触发记录，所有用户可以重新许愿。')) return;
+    
+    // 清空后端许愿记录
+    fetch('/api/wishes/clear', {
+        method: 'POST'
+    }).then(function() {
+        // 清空前端许愿记录
+        wishes = [];
+        renderWishes();
+        
+        // 清除所有用户的localStorage中的许愿相关数据
+        // 由于无法直接清除其他用户的localStorage，需要通过API通知
+        fetch('/api/reset-wishes', {
+            method: 'POST'
+        }).then(function() {
+            alert('重置成功！所有许愿记录和菜单触发记录已清空。');
+        });
+    });
+}
+</script>
+{% endblock %}

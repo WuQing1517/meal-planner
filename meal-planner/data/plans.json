@@ -1,0 +1,1895 @@
+{
+  "plans": [
+    {
+      "meal_plan_name": "标准方案",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "标准方案",
+        "meals": [
+          {
+            "name": "早餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 27219.5
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 3601.3
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 7402.2
+              }
+            ],
+            "nutrients": {
+              "protein": 55.0,
+              "carbs": 80.0,
+              "fat": 12.0
+            }
+          },
+          {
+            "name": "午餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 27520.8
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 17.8
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 14652.5
+              }
+            ],
+            "nutrients": {
+              "protein": 50.0,
+              "carbs": 80.0,
+              "fat": 18.0
+            }
+          },
+          {
+            "name": "晚餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 31170.7
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 917.4
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 10674.2
+              }
+            ],
+            "nutrients": {
+              "protein": 45.0,
+              "carbs": 90.0,
+              "fat": 14.0
+            }
+          }
+        ],
+        "daily_total": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        }
+      },
+      "selected_foods": [
+        "47ac7580",
+        "ef57e89a",
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "a7ec57d6",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4"
+      ],
+      "mix_ratios": {},
+      "id": "f3bcbe86"
+    },
+    {
+      "meal_plan_name": "标准方案",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "标准方案",
+        "meals": [
+          {
+            "name": "早餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 272.2
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 36.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 74.0
+              }
+            ],
+            "nutrients": {
+              "protein": 55.0,
+              "carbs": 80.0,
+              "fat": 12.0
+            }
+          },
+          {
+            "name": "午餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 275.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 146.5
+              }
+            ],
+            "nutrients": {
+              "protein": 49.9,
+              "carbs": 80.0,
+              "fat": 18.0
+            }
+          },
+          {
+            "name": "晚餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 311.7
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 9.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 106.7
+              }
+            ],
+            "nutrients": {
+              "protein": 45.0,
+              "carbs": 90.0,
+              "fat": 14.0
+            }
+          }
+        ],
+        "daily_total": {
+          "protein": 149.9,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        }
+      },
+      "selected_foods": [
+        "47ac7580",
+        "ef57e89a",
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "a7ec57d6",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4"
+      ],
+      "mix_ratios": {},
+      "id": "edc080ce"
+    },
+    {
+      "meal_plan_name": "标准方案",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "标准方案",
+        "meals": [
+          {
+            "name": "早餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 272.2
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 36.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 74.0
+              }
+            ],
+            "nutrients": {
+              "protein": 55.0,
+              "carbs": 80.0,
+              "fat": 12.0
+            }
+          },
+          {
+            "name": "午餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 275.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 146.5
+              }
+            ],
+            "nutrients": {
+              "protein": 49.9,
+              "carbs": 80.0,
+              "fat": 18.0
+            }
+          },
+          {
+            "name": "晚餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 311.7
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 9.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 106.7
+              }
+            ],
+            "nutrients": {
+              "protein": 45.0,
+              "carbs": 90.0,
+              "fat": 14.0
+            }
+          }
+        ],
+        "daily_total": {
+          "protein": 149.9,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        }
+      },
+      "selected_foods": [
+        "47ac7580",
+        "ef57e89a",
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "a7ec57d6",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4"
+      ],
+      "mix_ratios": {},
+      "id": "af0b129a"
+    },
+    {
+      "meal_plan_name": "标准方案",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "标准方案",
+        "meals": [
+          {
+            "name": "早餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 272.2
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 36.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 74.0
+              }
+            ],
+            "nutrients": {
+              "protein": 55.0,
+              "carbs": 80.0,
+              "fat": 12.0
+            }
+          },
+          {
+            "name": "午餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 275.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 146.5
+              }
+            ],
+            "nutrients": {
+              "protein": 49.9,
+              "carbs": 80.0,
+              "fat": 18.0
+            }
+          },
+          {
+            "name": "晚餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 311.7
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 9.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 106.7
+              }
+            ],
+            "nutrients": {
+              "protein": 45.0,
+              "carbs": 90.0,
+              "fat": 14.0
+            }
+          }
+        ],
+        "daily_total": {
+          "protein": 149.9,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        }
+      },
+      "selected_foods": [
+        "47ac7580",
+        "ef57e89a",
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "a7ec57d6",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4"
+      ],
+      "mix_ratios": {},
+      "id": "c751bee5"
+    },
+    {
+      "meal_plan_name": "标准方案",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "标准方案",
+        "meals": [
+          {
+            "name": "早餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 272.2
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 36.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 74.0
+              }
+            ],
+            "nutrients": {
+              "protein": 55.0,
+              "carbs": 80.0,
+              "fat": 12.0
+            }
+          },
+          {
+            "name": "午餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 275.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 146.5
+              }
+            ],
+            "nutrients": {
+              "protein": 49.9,
+              "carbs": 80.0,
+              "fat": 18.0
+            }
+          },
+          {
+            "name": "晚餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 311.7
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 9.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 106.7
+              }
+            ],
+            "nutrients": {
+              "protein": 45.0,
+              "carbs": 90.0,
+              "fat": 14.0
+            }
+          }
+        ],
+        "daily_total": {
+          "protein": 149.9,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        }
+      },
+      "selected_foods": [
+        "47ac7580",
+        "ef57e89a",
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "a7ec57d6",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4"
+      ],
+      "mix_ratios": {},
+      "id": "3f9d8439"
+    },
+    {
+      "meal_plan_name": "标准方案",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "标准方案",
+        "meals": [
+          {
+            "name": "早餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 272.2
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 36.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 74.0
+              }
+            ],
+            "nutrients": {
+              "protein": 55.0,
+              "carbs": 80.0,
+              "fat": 12.0
+            }
+          },
+          {
+            "name": "午餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 275.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 146.5
+              }
+            ],
+            "nutrients": {
+              "protein": 49.9,
+              "carbs": 80.0,
+              "fat": 18.0
+            }
+          },
+          {
+            "name": "晚餐",
+            "time": "",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 311.7
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 9.2
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 3,
+                "amount_grams": 106.7
+              }
+            ],
+            "nutrients": {
+              "protein": 45.0,
+              "carbs": 90.0,
+              "fat": 14.0
+            }
+          }
+        ],
+        "nutrient_constraints": {
+          "protein": "hard",
+          "carbs": "hard",
+          "fat": "hard"
+        },
+        "daily_total": {
+          "protein": 149.9,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_diff": {
+          "protein": -0.1,
+          "carbs": 0.0,
+          "fat": 0.0
+        }
+      },
+      "selected_foods": [
+        "47ac7580",
+        "ef57e89a",
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "a7ec57d6",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4"
+      ],
+      "mix_ratios": {},
+      "id": "d80816e5"
+    },
+    {
+      "meal_plan_name": "晨骑+晚间健身",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "晨骑+晚间健身",
+        "meals": [
+          {
+            "name": "午餐",
+            "time": "12:00",
+            "is_fixed": true,
+            "foods": [],
+            "nutrients": {
+              "protein": 40.0,
+              "carbs": 80.0,
+              "fat": 25.0
+            }
+          },
+          {
+            "name": "骑行前",
+            "time": "06:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 105.9
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 6.8
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 10.7
+              }
+            ],
+            "nutrients": {
+              "protein": 10.1,
+              "carbs": 30.3,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "骑行后早餐",
+            "time": "08:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 170.6
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 22.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 66.8
+              }
+            ],
+            "nutrients": {
+              "protein": 40.4,
+              "carbs": 50.5,
+              "fat": 9.9
+            }
+          },
+          {
+            "name": "加餐",
+            "time": "15:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 68.1
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 16.0
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 5.6
+              }
+            ],
+            "nutrients": {
+              "protein": 15.2,
+              "carbs": 20.2,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身前加餐",
+            "time": "19:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 98.2
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 15.6
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 5.4
+              }
+            ],
+            "nutrients": {
+              "protein": 15.1,
+              "carbs": 28.6,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身后加餐",
+            "time": "22:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 136.3
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 33.8
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 3.4
+              }
+            ],
+            "nutrients": {
+              "protein": 29.2,
+              "carbs": 40.4,
+              "fat": 3.2
+            }
+          }
+        ],
+        "constraint_rules": {
+          "protein": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "carbs": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "fat": {
+            "hard_exceed": false,
+            "hard_reduce": false,
+            "exceed_priority": 3,
+            "reduce_priority": 1
+          }
+        },
+        "daily_total": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.1
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_diff": {
+          "protein": 0.0,
+          "carbs": 0.0,
+          "fat": 0.1
+        }
+      },
+      "selected_foods": [
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4",
+        "9f62498e"
+      ],
+      "mix_ratios": {},
+      "id": "7c0f7ca9"
+    },
+    {
+      "meal_plan_name": "晨骑+晚间健身",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "晨骑+晚间健身",
+        "meals": [
+          {
+            "name": "午餐",
+            "time": "12:00",
+            "is_fixed": true,
+            "foods": [],
+            "nutrients": {
+              "protein": 40.0,
+              "carbs": 80.0,
+              "fat": 25.0
+            }
+          },
+          {
+            "name": "骑行前",
+            "time": "06:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 106
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 7
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 11
+              }
+            ],
+            "nutrients": {
+              "protein": 10.1,
+              "carbs": 30.3,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "骑行后早餐",
+            "time": "08:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 171
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 22
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 67
+              }
+            ],
+            "nutrients": {
+              "protein": 40.4,
+              "carbs": 50.5,
+              "fat": 9.9
+            }
+          },
+          {
+            "name": "加餐",
+            "time": "15:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 68
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 16
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 6
+              }
+            ],
+            "nutrients": {
+              "protein": 15.2,
+              "carbs": 20.2,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身前加餐",
+            "time": "19:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 98
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 16
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 5
+              }
+            ],
+            "nutrients": {
+              "protein": 15.1,
+              "carbs": 28.6,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身后加餐",
+            "time": "22:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 136
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 34
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 3
+              }
+            ],
+            "nutrients": {
+              "protein": 29.2,
+              "carbs": 40.4,
+              "fat": 3.2
+            }
+          }
+        ],
+        "constraint_rules": {
+          "protein": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "carbs": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "fat": {
+            "hard_exceed": false,
+            "hard_reduce": false,
+            "exceed_priority": 3,
+            "reduce_priority": 1
+          }
+        },
+        "daily_total": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.1
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_diff": {
+          "protein": 0.0,
+          "carbs": 0.0,
+          "fat": 0.1
+        }
+      },
+      "selected_foods": [
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4",
+        "9f62498e"
+      ],
+      "mix_ratios": {},
+      "id": "378182f0"
+    },
+    {
+      "meal_plan_name": "晨骑+晚间健身",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "晨骑+晚间健身",
+        "meals": [
+          {
+            "name": "午餐",
+            "time": "12:00",
+            "is_fixed": true,
+            "foods": [],
+            "nutrients": {
+              "protein": 40.0,
+              "carbs": 80.0,
+              "fat": 25.0
+            }
+          },
+          {
+            "name": "骑行前",
+            "time": "06:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 106
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 7
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 11
+              }
+            ],
+            "nutrients": {
+              "protein": 10.1,
+              "carbs": 30.3,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "骑行后早餐",
+            "time": "08:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 171
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 22
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 67
+              }
+            ],
+            "nutrients": {
+              "protein": 40.4,
+              "carbs": 50.5,
+              "fat": 9.9
+            }
+          },
+          {
+            "name": "加餐",
+            "time": "15:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 68
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 16
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 6
+              }
+            ],
+            "nutrients": {
+              "protein": 15.2,
+              "carbs": 20.2,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身前加餐",
+            "time": "19:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 98
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 16
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 5
+              }
+            ],
+            "nutrients": {
+              "protein": 15.1,
+              "carbs": 28.6,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身后加餐",
+            "time": "22:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 136
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 34
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 3
+              }
+            ],
+            "nutrients": {
+              "protein": 29.2,
+              "carbs": 40.4,
+              "fat": 3.2
+            }
+          }
+        ],
+        "constraint_rules": {
+          "protein": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "carbs": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "fat": {
+            "hard_exceed": false,
+            "hard_reduce": false,
+            "exceed_priority": 3,
+            "reduce_priority": 1
+          }
+        },
+        "daily_total": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.1
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_diff": {
+          "protein": 0.0,
+          "carbs": 0.0,
+          "fat": 0.1
+        }
+      },
+      "selected_foods": [
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4",
+        "9f62498e"
+      ],
+      "mix_ratios": {},
+      "id": "48fc074e"
+    },
+    {
+      "meal_plan_name": "无骑行+晚间健身",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "无骑行+晚间健身",
+        "meals": [
+          {
+            "name": "午餐",
+            "time": "12:00",
+            "is_fixed": true,
+            "foods": [],
+            "nutrients": {
+              "protein": 40.0,
+              "carbs": 80.0,
+              "fat": 25.0
+            }
+          },
+          {
+            "name": "早餐",
+            "time": "08:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 278
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 27
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 62
+              }
+            ],
+            "nutrients": {
+              "protein": 44.4,
+              "carbs": 80.8,
+              "fat": 9.9
+            }
+          },
+          {
+            "name": "加餐",
+            "time": "15:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 62
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 16
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 6
+              }
+            ],
+            "nutrients": {
+              "protein": 15.2,
+              "carbs": 18.5,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身前加餐",
+            "time": "19:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 104
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 15
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 5
+              }
+            ],
+            "nutrients": {
+              "protein": 15.1,
+              "carbs": 30.3,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "健身后加餐",
+            "time": "22:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 135
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 35
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 19
+              }
+            ],
+            "nutrients": {
+              "protein": 35.4,
+              "carbs": 40.4,
+              "fat": 5.1
+            }
+          }
+        ],
+        "constraint_rules": {
+          "protein": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "carbs": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "fat": {
+            "hard_exceed": false,
+            "hard_reduce": false,
+            "exceed_priority": 3,
+            "reduce_priority": 1
+          }
+        },
+        "daily_total": {
+          "protein": 150.1,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_diff": {
+          "protein": 0.1,
+          "carbs": 0.0,
+          "fat": 0.0
+        }
+      },
+      "selected_foods": [
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4",
+        "9f62498e"
+      ],
+      "mix_ratios": {},
+      "id": "3dbb413e"
+    },
+    {
+      "meal_plan_name": "傍晚骑行+晚间健身",
+      "result": {
+        "status": "optimal",
+        "meal_plan_name": "傍晚骑行+晚间健身",
+        "meals": [
+          {
+            "name": "午餐",
+            "time": "12:00",
+            "is_fixed": true,
+            "foods": [],
+            "nutrients": {
+              "protein": 40.0,
+              "carbs": 80.0,
+              "fat": 25.0
+            }
+          },
+          {
+            "name": "早餐",
+            "time": "08:30",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 240
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 29
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 78
+              }
+            ],
+            "nutrients": {
+              "protein": 50.5,
+              "carbs": 70.7,
+              "fat": 11.9
+            }
+          },
+          {
+            "name": "骑行前加餐",
+            "time": "15:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 133
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 24
+              }
+            ],
+            "nutrients": {
+              "protein": 20.2,
+              "carbs": 38.7,
+              "fat": 2.0
+            }
+          },
+          {
+            "name": "骑后练前过渡",
+            "time": "18:50",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 121
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 22
+              }
+            ],
+            "nutrients": {
+              "protein": 19.1,
+              "carbs": 35.4,
+              "fat": 1.9
+            }
+          },
+          {
+            "name": "健身后加餐",
+            "time": "22:00",
+            "is_fixed": false,
+            "foods": [
+              {
+                "id": "88056491",
+                "name": "水蒸紫薯",
+                "category": "碳水类",
+                "priority": 1,
+                "amount_grams": 85
+              },
+              {
+                "id": "25442ee4",
+                "name": "混合蛋白粉",
+                "category": "蛋白质类",
+                "priority": 1,
+                "amount_grams": 15
+              },
+              {
+                "id": "e791d159",
+                "name": "卤牛腱子肉",
+                "category": "蛋白质类",
+                "priority": 2,
+                "amount_grams": 22
+              }
+            ],
+            "nutrients": {
+              "protein": 20.2,
+              "carbs": 25.3,
+              "fat": 4.0
+            }
+          }
+        ],
+        "constraint_rules": {
+          "protein": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "carbs": {
+            "hard_exceed": false,
+            "hard_reduce": true,
+            "exceed_priority": 2,
+            "reduce_priority": 1
+          },
+          "fat": {
+            "hard_exceed": false,
+            "hard_reduce": false,
+            "exceed_priority": 3,
+            "reduce_priority": 1
+          }
+        },
+        "daily_total": {
+          "protein": 150.0,
+          "carbs": 250.1,
+          "fat": 44.8
+        },
+        "daily_target": {
+          "protein": 150.0,
+          "carbs": 250.0,
+          "fat": 44.0
+        },
+        "daily_diff": {
+          "protein": 0.0,
+          "carbs": 0.1,
+          "fat": 0.8
+        }
+      },
+      "selected_foods": [
+        "e791d159",
+        "99d48a4e",
+        "a2c58328",
+        "effb745f",
+        "88056491",
+        "b048136c",
+        "80b31cb3",
+        "05f96f51",
+        "8bdee589",
+        "d63a477f",
+        "25442ee4",
+        "9f62498e"
+      ],
+      "mix_ratios": {},
+      "id": "dc02f736"
+    }
+  ]
+}

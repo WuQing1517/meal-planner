@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}生成配比方案{% endblock %}
+
+{% block content %}
+<h2>生成配比方案</h2>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>选择餐数方案</h5>
+            </div>
+            <div class="card-body">
+                {% if meal_plans %}
+                <select class="form-select" id="mealPlanSelect">
+                    <option value="">请选择餐数方案</option>
+                    {% for plan in meal_plans %}
+                    <option value="{{ plan.id }}">{{ plan.name }} ({{ plan.meals|length }})</option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                <p class="text-muted">请先配置餐数方案。</p>
+                <a href="{{ url_for('meals_list') }}" class="btn btn-primary">配置餐数方案</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>选择可用食品</h5>
+            </div>
+            <div class="card-body">
+                {% if foods %}
+                <div class="mb-2">
+                    <button class="btn btn-sm btn-outline-primary" onclick="selectAllFoods()">全选</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="deselectAllFoods()">取消全选</button>
+                </div>
+                <div class="food-list" style="max-height: 250px; overflow-y: auto;">
+                    {% for food in foods %}
+                    <div class="form-check">
+                        <input class="form-check-input food-checkbox" type="checkbox"
+                               value="{{ food.id }}" id="food_{{ food.id }}"
+                               data-category="{{ food.category }}" data-name="{{ food.name }}"
+                               data-priority="{{ food.priority if food.priority is defined else 1 }}"
+                               onchange="updateCategoryMix()">
+                        <label class="form-check-label" for="food_{{ food.id }}">
+                            {{ food.name }} ({{ food.category }})
+                            <span class="badge bg-secondary ms-1">P{{ food.priority if food.priority is defined else 1 }}</span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">请先添加食品。</p>
+                <a href="{{ url_for('foods_list') }}" class="btn btn-primary">添加食品</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <button class="btn btn-success btn-lg w-100" onclick="generatePlan()" id="generateBtn">
+            生成配比方案
+        </button>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <h5>生成结果</h5>
+            </div>
+            <div class="card-body" id="resultContainer">
+                <p class="text-muted">选择餐数方案和食品后，点击"生成配比方案"按钮。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+                <p class="mt-2">正在计算最优配比...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var nutrientNames = {{ nutrient_names | tojson }};
+
+function getNutrientName(id) {
+    return nutrientNames[id] || id;
+}
+
+function selectAllFoods() {
+    document.querySelectorAll('.food-checkbox').forEach(cb => cb.checked = true);
+}
+
+function deselectAllFoods() {
+    document.querySelectorAll('.food-checkbox').forEach(cb => cb.checked = false);
+}
+
+function closeModal() {
+    var loadingModalEl = document.getElementById('loadingModal');
+    var modal = bootstrap.Modal.getInstance(loadingModalEl);
+    if (modal) {
+        modal.hide();
+    }
+    setTimeout(function() {
+        loadingModalEl.classList.remove('show');
+        loadingModalEl.setAttribute('aria-hidden', 'true');
+        loadingModalEl.style.display = 'none';
+        document.querySelectorAll('.modal-backdrop').forEach(function(el) { el.remove(); });
+        document.body.classList.remove('modal-open');
+        document.body.style.paddingRight = '';
+        document.body.style.overflow = '';
+        document.body.style.paddingLeft = '';
+    }, 300);
+}
+
+function generatePlan() {
+    var mealPlanId = document.getElementById('mealPlanSelect').value;
+    if (!mealPlanId) {
+        alert('请选择餐数方案');
+        return;
+    }
+
+    var selectedFoods = [];
+    document.querySelectorAll('.food-checkbox:checked').forEach(function(cb) {
+        selectedFoods.push(cb.value);
+    });
+
+    if (selectedFoods.length === 0) {
+        alert('请选择至少一种食品');
+        return;
+    }
+
+    var loadingModalEl = document.getElementById('loadingModal');
+    var loadingModal = new bootstrap.Modal(loadingModalEl);
+    loadingModal.show();
+
+    fetch('/plan/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            meal_plan_id: mealPlanId,
+            selected_foods: selectedFoods
+        })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        closeModal();
+        displayResult(data);
+    })
+    .catch(function(error) {
+        closeModal();
+        alert('生成失败: ' + error.message);
+    });
+}
+
+function displayResult(data) {
+    var container = document.getElementById('resultContainer');
+
+    if (data.status === 'infeasible') {
+        container.innerHTML = '<div class="alert alert-warning"><h5>无法生成配比方案</h5><p>' + (data.message || '') + '</p></div>';
+        return;
+    }
+
+    if (data.status !== 'optimal') {
+        container.innerHTML = '<div class="alert alert-danger">生成失败</div>';
+        return;
+    }
+
+    var html = '<div class="alert alert-success"><h5>配比方案生成成功!</h5></div>';
+    html += '<h6>方案名称: ' + (data.meal_plan_name || '') + '</h6>';
+
+    var dailyTotal = data.daily_total || {};
+    var dailyTarget = data.daily_target || {};
+    var dailyDiff = data.daily_diff || {};
+    var globalConstraints = data.global_constraints || {};
+
+    html += '<div class="card mb-3"><div class="card-header">每日营养总计（全局约束规则）</div><div class="card-body">';
+    html += '<table class="table table-sm"><thead><tr><th>排序</th><th>营养物质</th><th>目标</th><th>实际</th><th>差异</th><th>约束</th><th>状态</th></tr></thead><tbody>';
+
+    for (var key in dailyTotal) {
+        var actual = dailyTotal[key];
+        var target = dailyTarget[key] || 0;
+        var diff = dailyDiff[key] || 0;
+        var gc = globalConstraints[key] || {};
+        var constraint = gc.type || 'hard';
+        var priority = gc.priority || 100;
+
+        var constraintBadge = '';
+        if (constraint === 'hard') {
+            constraintBadge = '<span class="badge bg-danger">硬性</span>';
+        } else if (constraint === 'can_exceed') {
+            constraintBadge = '<span class="badge bg-warning text-dark">可超出</span>';
+        } else {
+            constraintBadge = '<span class="badge bg-secondary">可减少</span>';
+        }
+
+        var diffText = '';
+        var statusText = '';
+        var rowClass = '';
+
+        if (constraint === 'hard') {
+            if (diff >= 0) {
+                diffText = '<span class="text-success">+' + diff + 'g</span>';
+                statusText = '<span class="badge bg-success">达标</span>';
+            } else {
+                diffText = '<span class="text-danger">' + diff + 'g</span>';
+                statusText = '<span class="badge bg-danger">不足</span>';
+                rowClass = 'table-danger';
+            }
+        } else if (constraint === 'can_exceed') {
+            if (diff >= 0) {
+                diffText = '<span class="text-warning">+' + diff + 'g</span>';
+                statusText = '<span class="badge bg-warning text-dark">超出</span>';
+            } else {
+                diffText = '<span class="text-danger">' + diff + 'g</span>';
+                statusText = '<span class="badge bg-danger">不足</span>';
+                rowClass = 'table-danger';
+            }
+        } else {
+            if (diff >= 0) {
+                diffText = '<span class="text-success">+' + diff + 'g</span>';
+                statusText = '<span class="badge bg-success">达标</span>';
+            } else {
+                diffText = '<span class="text-muted">' + diff + 'g</span>';
+                statusText = '<span class="badge bg-secondary">减少中</span>';
+            }
+        }
+
+        html += '<tr class="' + rowClass + '">';
+        html += '<td><span class="badge bg-primary">' + priority + '</span></td>';
+        html += '<td><strong>' + getNutrientName(key) + '</strong></td>';
+        html += '<td>' + target + 'g</td>';
+        html += '<td>' + actual + 'g</td>';
+        html += '<td>' + diffText + '</td>';
+        html += '<td>' + constraintBadge + '</td>';
+        html += '<td>' + statusText + '</td>';
+        html += '</tr>';
+    }
+
+    html += '</tbody></table></div></div>';
+
+    var meals = data.meals || [];
+    for (var i = 0; i < meals.length; i++) {
+        var meal = meals[i];
+        var fixedBadge = meal.is_fixed ? '<span class="badge bg-warning text-dark ms-2">固定餐</span>' : '';
+        var borderColor = meal.is_fixed ? 'border-warning' : '';
+
+        html += '<div class="card mb-3 ' + borderColor + '">';
+        html += '<div class="card-header">' + (meal.name || '') + ' (' + (meal.time || '') + ')' + fixedBadge + '</div>';
+        html += '<div class="card-body">';
+
+        if (meal.is_fixed) {
+            html += '<p class="text-muted mb-2">此餐为固定餐，营养已计入全天总量。</p>';
+        } else {
+            html += '<h6>食品配比:</h6><ul class="list-group mb-3">';
+            var foods = meal.foods || [];
+            for (var j = 0; j < foods.length; j++) {
+                html += '<li class="list-group-item d-flex justify-content-between">';
+                html += '<span>' + foods[j].name + '</span>';
+                html += '<span>' + foods[j].amount_grams + 'g</span>';
+                html += '</li>';
+            }
+            html += '</ul>';
+        }
+
+        html += '<h6>营养摄入:</h6><div class="row">';
+        var nutrients = meal.nutrients || {};
+        for (var nKey in nutrients) {
+            html += '<div class="col-md-3"><strong>' + getNutrientName(nKey) + ':</strong> ' + nutrients[nKey] + 'g</div>';
+        }
+        html += '</div></div></div>';
+    }
+
+    container.innerHTML = html;
+}
+</script>
+{% endblock %}

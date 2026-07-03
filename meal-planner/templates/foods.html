@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+
+{% block title %}食品管理{% endblock %}
+
+{% block content %}
+<h2>食品管理</h2>
+
+<!-- 添加食品表单 -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>添加食品</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('foods_add') }}" id="addFoodForm">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">食品名称</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">优先级</label>
+                    <input type="number" class="form-control" name="priority" value="1" min="1" max="10"
+                           placeholder="1-10，数字越小越优先">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">分类</label>
+                    <div class="input-group">
+                        <select class="form-select" name="category" id="addCategorySelect">
+                            {% for cat in categories %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" class="form-control" id="addNewCategory" placeholder="新分类名称">
+                        <button type="button" class="btn btn-outline-secondary" onclick="addNewCategory('add')">添加</button>
+                    </div>
+                    <small class="text-muted">自动根据营养成分为：&nbsp;<span id="addAutoCategory" class="badge bg-secondary">-</span></small>
+                </div>
+            </div>
+
+            <h6>每100g营养成分</h6>
+            <div class="row">
+                {% for nutrient in nutrients %}
+                <div class="col-md-3 mb-2">
+                    <label class="form-label">{{ nutrient.name }} ({{ nutrient.unit }})</label>
+                    <input type="number" class="form-control nutrient-input" name="nutrition_{{ nutrient.id }}"
+                           step="0.01" min="0" placeholder="0.00" oninput="updateAutoCategory('add')">
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3">添加食品</button>
+        </form>
+    </div>
+</div>
+
+<!-- 食品列表 -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">食品列表</h5>
+        <div>
+            <select class="form-select form-select-sm" id="categoryFilter" onchange="filterFoods()">
+                <option value="">全部分类</option>
+                {% for cat in categories %}
+                <option value="{{ cat }}">{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if foods %}
+        <table class="table table-striped" id="foodsTable">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>分类</th>
+                    <th>优先级</th>
+                    {% for nutrient in nutrients %}
+                    <th>{{ nutrient.name }}/{{ nutrient.unit }}</th>
+                    {% endfor %}
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for food in foods %}
+                <tr data-category="{{ food.category }}">
+                    <td>{{ food.name }}</td>
+                    <td>
+                        <span class="badge bg-{% if food.category == '蛋白质类' %}danger{% elif food.category == '碳水类' %}warning text-dark{% elif food.category == '脂肪类' %}info{% else %}secondary{% endif %}">
+                            {{ food.category }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-{% if food.priority is defined and food.priority <= 2 %}success{% elif food.priority is defined and food.priority <= 5 %}primary{% else %}secondary{% endif %}">
+                            {{ food.priority if food.priority is defined else 1 }}
+                        </span>
+                    </td>
+                    {% for nutrient in nutrients %}
+                    <td>{{ "%.2f"|format(food.nutrition_per_100g.get(nutrient.id, 0)) }}</td>
+                    {% endfor %}
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick='editFood({{ food|tojson }})'>编辑</button>
+                        <form method="POST" action="{{ url_for('foods_delete', food_id=food.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">暂无食品，请添加。</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 编辑模态框 -->
+<div class="modal fade" id="editFoodModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="POST" id="editFoodForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">编辑食品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">食品名称</label>
+                            <input type="text" class="form-control" name="name" id="editFoodName" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">优先级</label>
+                            <input type="number" class="form-control" name="priority" id="editFoodPriority"
+                                   value="1" min="1" max="10">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">分类</label>
+                            <div class="input-group">
+                                <select class="form-select" name="category" id="editCategorySelect">
+                                    {% for cat in categories %}
+                                    <option value="{{ cat }}">{{ cat }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="text" class="form-control" id="editNewCategory" placeholder="新分类名称">
+                                <button type="button" class="btn btn-outline-secondary" onclick="addNewCategory('edit')">添加</button>
+                            </div>
+                            <small class="text-muted">自动根据营养成分为：&nbsp;<span id="editAutoCategory" class="badge bg-secondary">-</span></small>
+                        </div>
+                    </div>
+
+                    <h6>每100g营养成分</h6>
+                    <div class="row" id="editNutritionFields">
+                        {% for nutrient in nutrients %}
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label">{{ nutrient.name }} ({{ nutrient.unit }})</label>
+                            <input type="number" class="form-control edit-nutrient-input" name="nutrition_{{ nutrient.id }}"
+                                   id="editNutrition_{{ nutrient.id }}" step="0.01" min="0" oninput="updateAutoCategory('edit')">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 获取当前所有分类选项
+function getCategoryOptions() {
+    const select = document.getElementById('addCategorySelect');
+    return Array.from(select.options).map(opt => opt.value);
+}
+
+// 自动分类判断
+function autoCategorize(protein, carbs, fat) {
+    const proteinCal = (protein || 0) * 4;
+    const carbsCal = (carbs || 0) * 4;
+    const fatCal = (fat || 0) * 9;
+    const maxCal = Math.max(proteinCal, carbsCal, fatCal);
+
+    if (maxCal === 0) return "其他";
+    if (proteinCal === maxCal) return "蛋白质类";
+    if (carbsCal === maxCal) return "碳水类";
+    if (fatCal === maxCal) return "脂肪类";
+    return "其他";
+}
+
+// 更新自动分类显示
+function updateAutoCategory(prefix) {
+    const formId = prefix === 'add' ? 'addFoodForm' : 'editFoodForm';
+    const form = document.getElementById(formId);
+    
+    const protein = parseFloat(form.querySelector('[name="nutrition_protein"]')?.value) || 0;
+    const carbs = parseFloat(form.querySelector('[name="nutrition_carbs"]')?.value) || 0;
+    const fat = parseFloat(form.querySelector('[name="nutrition_fat"]')?.value) || 0;
+
+    const category = autoCategorize(protein, carbs, fat);
+    const preview = document.getElementById(`${prefix}AutoCategory`);
+
+    let badgeClass = 'bg-secondary';
+    if (category === '蛋白质类') badgeClass = 'bg-danger';
+    else if (category === '碳水类') badgeClass = 'bg-warning text-dark';
+    else if (category === '脂肪类') badgeClass = 'bg-info';
+
+    preview.className = `badge ${badgeClass}`;
+    preview.textContent = category;
+}
+
+// 添加新分类
+function addNewCategory(prefix) {
+    const newCategoryInput = document.getElementById(`${prefix}NewCategory`);
+    const newCategory = newCategoryInput.value.trim();
+    
+    if (!newCategory) {
+        alert('请输入分类名称');
+        return;
+    }
+    
+    const select = document.getElementById(`${prefix}CategorySelect`);
+    
+    // 检查是否已存在
+    for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === newCategory) {
+            select.value = newCategory;
+            newCategoryInput.value = '';
+            return;
+        }
+    }
+    
+    // 添加新选项
+    const option = document.createElement('option');
+    option.value = newCategory;
+    option.text = newCategory;
+    select.add(option);
+    select.value = newCategory;
+    newCategoryInput.value = '';
+}
+
+// 分类筛选
+function filterFoods() {
+    const filter = document.getElementById('categoryFilter').value;
+    const rows = document.querySelectorAll('#foodsTable tbody tr');
+    rows.forEach(row => {
+        if (!filter || row.dataset.category === filter) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// 编辑食品
+function editFood(food) {
+    document.getElementById('editFoodForm').action = '/foods/edit/' + food.id;
+    document.getElementById('editFoodName').value = food.name;
+    document.getElementById('editFoodPriority').value = food.priority || 1;
+    
+    // 设置分类
+    const categorySelect = document.getElementById('editCategorySelect');
+    let categoryExists = false;
+    for (let i = 0; i < categorySelect.options.length; i++) {
+        if (categorySelect.options[i].value === food.category) {
+            categoryExists = true;
+            break;
+        }
+    }
+    if (!categoryExists && food.category) {
+        const option = document.createElement('option');
+        option.value = food.category;
+        option.text = food.category;
+        categorySelect.add(option);
+    }
+    categorySelect.value = food.category;
+
+    // 填充营养成分
+    const nutrition = food.nutrition_per_100g || {};
+    for (const [key, value] of Object.entries(nutrition)) {
+        const input = document.getElementById('editNutrition_' + key);
+        if (input) {
+            input.value = value;
+        }
+    }
+
+    // 更新分类预览
+    updateAutoCategory('edit');
+
+    new bootstrap.Modal(document.getElementById('editFoodModal')).show();
+}
+</script>
+{% endblock %}

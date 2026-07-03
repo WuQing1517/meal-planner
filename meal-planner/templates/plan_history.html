@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}历史方案{% endblock %}
+
+{% block content %}
+<h2>历史方案</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h5>已生成的配比方案</h5>
+    </div>
+    <div class="card-body">
+        {% if plans %}
+        {% for plan in plans %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">{{ plan.meal_plan_name }}</h6>
+                <small class="text-muted">ID: {{ plan.id }}</small>
+            </div>
+            <div class="card-body">
+                {% if plan.result and plan.result.meals %}
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <h6>每日营养总计：</h6>
+                        <div class="d-flex flex-wrap gap-3">
+                            {% for nutrient_id, value in plan.result.daily_total.items() %}
+                            <span class="badge bg-primary">{{ nutrient_names.get(nutrient_id, nutrient_id) }}: {{ value }}g</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                {% for meal in plan.result.meals %}
+                <div class="border rounded p-3 mb-2">
+                    <h6>{{ meal.name }} ({{ meal.time }})</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>食品：</strong>
+                            {% for food in meal.foods %}
+                            <span class="badge bg-secondary me-1">{{ food.name }} {{ food.amount_grams }}g</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>营养：</strong>
+                            {% for nutrient_id, value in meal.nutrients.items() %}
+                            <span class="badge bg-info me-1">{{ nutrient_names.get(nutrient_id, nutrient_id) }}: {{ value }}g</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">无详细数据</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">暂无历史方案。</p>
+        <a href="{{ url_for('plan_page') }}" class="btn btn-primary">生成新方案</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

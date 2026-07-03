@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}约束规则配置{% endblock %}
+
+{% block content %}
+<h2>约束规则配置</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h5>设置每种营养物质的约束规则（适用于所有单餐）</h5>
+    </div>
+    <div class="card-body">
+        {% if nutrients %}
+        <form method="POST" action="{{ url_for('constraint_rules_save') }}">
+            <div class="alert alert-info">
+                <strong>约束规则说明：</strong>
+                <ul class="mb-0 mt-1">
+                    <li><strong>硬性超出</strong>：勾选后超出是不允许的（必须在范围内）</li>
+                    <li><strong>硬性减少</strong>：勾选后减少是不允许的（必须达到最小值）</li>
+                    <li><strong>超出优先级</strong>：允许超出时的优先级，数字越小越优先</li>
+                    <li><strong>减少优先级</strong>：允许不足时的优先级，数字越小越优先</li>
+                </ul>
+                <p class="mb-0 mt-2"><em>每种营养物质的"超出"和"减少"可以独立设置。例如：蛋白质超出不允许，但减少可以接受。</em></p>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>营养物质</th>
+                        <th>单位</th>
+                        <th>硬性超出<br><small>不允许超出</small></th>
+                        <th>硬性减少<br><small>不允许不足</small></th>
+                        <th>超出优先级<br><small>允许超出时</small></th>
+                        <th>减少优先级<br><small>允许不足时</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nutrient in nutrients %}
+                    {% set rule = rules.get(nutrient.id, {}) %}
+                    <tr>
+                        <td>{{ nutrient.name }}</td>
+                        <td>{{ nutrient.unit }}</td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="{{ nutrient.id }}_hard_exceed" value="1"
+                                       {% if rule.get('hard_exceed', false) %}checked{% endif %}
+                                       onchange="toggleExceedPriority('{{ nutrient.id }}', this.checked)">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="{{ nutrient.id }}_hard_reduce" value="1"
+                                       {% if rule.get('hard_reduce', false) %}checked{% endif %}
+                                       onchange="toggleReducePriority('{{ nutrient.id }}', this.checked)">
+                            </div>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm"
+                                   name="{{ nutrient.id }}_exceed_priority"
+                                   value="{{ rule.get('exceed_priority', 1) }}"
+                                   min="1" max="100" id="exceed_{{ nutrient.id }}"
+                                   {% if rule.get('hard_exceed', false) %}disabled{% endif %}>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm"
+                                   name="{{ nutrient.id }}_reduce_priority"
+                                   value="{{ rule.get('reduce_priority', 1) }}"
+                                   min="1" max="100" id="reduce_{{ nutrient.id }}"
+                                   {% if rule.get('hard_reduce', false) %}disabled{% endif %}>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">保存配置</button>
+        </form>
+        {% else %}
+        <p class="text-muted">请先添加营养物质。</p>
+        <a href="{{ url_for('nutrients_list') }}" class="btn btn-primary">添加营养物质</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>当前配置</h5>
+    </div>
+    <div class="card-body">
+        {% if rules %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>营养物质</th>
+                    <th>硬性超出</th>
+                    <th>硬性减少</th>
+                    <th>超出优先级</th>
+                    <th>减少优先级</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nutrient in nutrients %}
+                {% set rule = rules.get(nutrient.id, {}) %}
+                <tr>
+                    <td>{{ nutrient.name }}</td>
+                    <td>
+                        {% if rule.get('hard_exceed', false) %}
+                            <span class="badge bg-danger">是（不允许超出）</span>
+                        {% else %}
+                            <span class="badge bg-secondary">否</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if rule.get('hard_reduce', false) %}
+                            <span class="badge bg-danger">是（不允许不足）</span>
+                        {% else %}
+                            <span class="badge bg-secondary">否</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if rule.get('hard_exceed', false) %}
+                            <span class="text-muted">-</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">P{{ rule.get('exceed_priority', 1) }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if rule.get('hard_reduce', false) %}
+                            <span class="text-muted">-</span>
+                        {% else %}
+                            <span class="badge bg-secondary">P{{ rule.get('reduce_priority', 1) }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted">暂无配置。</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleExceedPriority(nutrientId, isHard) {
+    var input = document.getElementById('exceed_' + nutrientId);
+    input.disabled = isHard;
+}
+
+function toggleReducePriority(nutrientId, isHard) {
+    var input = document.getElementById('reduce_' + nutrientId);
+    input.disabled = isHard;
+}
+</script>
+{% endblock %}

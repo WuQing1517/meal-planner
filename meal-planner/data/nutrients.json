@@ -1,0 +1,22 @@
+{
+  "nutrients": [
+    {
+      "id": "protein",
+      "name": "蛋白质",
+      "unit": "1",
+      "description": "肌肉生长修复"
+    },
+    {
+      "id": "carbs",
+      "name": "碳水化合物",
+      "unit": "1",
+      "description": "能量来源"
+    },
+    {
+      "id": "fat",
+      "name": "脂肪",
+      "unit": "1",
+      "description": "能量储备"
+    }
+  ]
+}

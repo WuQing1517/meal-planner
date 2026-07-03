@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}系统设置{% endblock %}
+
+{% block content %}
+<h2>系统设置</h2>
+
+<div class="row">
+    <!-- 背景设置 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>背景设置</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">背景类型</label>
+                    <select class="form-select" id="bgType" onchange="toggleBgType()">
+                        <option value="color">纯色背景</option>
+                        <option value="image">图片背景</option>
+                    </select>
+                </div>
+
+                <div id="bgColorSetting">
+                    <div class="mb-3">
+                        <label class="form-label">背景颜色</label>
+                        <input type="color" class="form-control form-control-color" id="bgColor" value="#ffffff">
+                    </div>
+                </div>
+
+                <div id="bgImageSetting" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label">选择背景图片</label>
+                        <input type="file" class="form-control" name="background" accept="image/*" id="bgInput">
+                    </div>
+                    <div class="mb-3">
+                        <img id="preview" src="#" alt="预览" style="max-width: 100%; border-radius: 8px; display: none;">
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="saveBgSetting()">保存背景设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 字体设置 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>字体设置</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">字体颜色</label>
+                    <input type="color" class="form-control form-control-color" id="textColor" value="#000000">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">字体描边颜色</label>
+                    <input type="color" class="form-control form-control-color" id="textStrokeColor" value="#ffffff">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="saveFontSetting()">保存字体设置</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- 卡片颜色 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>卡片颜色</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">卡片背景颜色</label>
+                    <input type="color" class="form-control form-control-color" id="cardColor" value="#666666">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="saveCardSetting()">保存卡片设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏设置 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>导航栏设置</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">导航栏背景颜色</label>
+                    <input type="color" class="form-control form-control-color" id="navColor" value="#666666">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">导航栏字体颜色</label>
+                    <input type="color" class="form-control form-control-color" id="navTextColor" value="#000000">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="saveNavSetting()">保存导航栏设置</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <button type="button" class="btn btn-danger" onclick="resetAllSettings()">恢复所有默认设置</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 加载保存的颜色设置
+function loadSettings() {
+    // 背景设置
+    var bgSettings = JSON.parse(localStorage.getItem('bgSettings') || '{}');
+    document.getElementById('bgType').value = bgSettings.bgType || 'color';
+    document.getElementById('bgColor').value = bgSettings.bgColor || '#ffffff';
+    toggleBgType();
+
+    // 字体设置
+    var fontSettings = JSON.parse(localStorage.getItem('fontSettings') || '{}');
+    document.getElementById('textColor').value = fontSettings.textColor || '#000000';
+    document.getElementById('textStrokeColor').value = fontSettings.textStrokeColor || '#ffffff';
+
+    // 卡片设置
+    var cardSettings = JSON.parse(localStorage.getItem('cardSettings') || '{}');
+    document.getElementById('cardColor').value = cardSettings.cardColor || '#666666';
+
+    // 导航栏设置
+    var navSettings = JSON.parse(localStorage.getItem('navSettings') || '{}');
+    document.getElementById('navColor').value = navSettings.navColor || '#666666';
+    document.getElementById('navTextColor').value = navSettings.navTextColor || '#000000';
+
+    applyAllSettings();
+}
+
+// 切换背景类型
+function toggleBgType() {
+    var bgType = document.getElementById('bgType').value;
+    document.getElementById('bgColorSetting').style.display = bgType === 'color' ? 'block' : 'none';
+    document.getElementById('bgImageSetting').style.display = bgType === 'image' ? 'block' : 'none';
+}
+
+// 保存背景设置
+function saveBgSetting() {
+    var settings = {
+        bgType: document.getElementById('bgType').value,
+        bgColor: document.getElementById('bgColor').value
+    };
+    localStorage.setItem('bgSettings', JSON.stringify(settings));
+    applyBgSettings(settings);
+    alert('背景设置已保存！');
+}
+
+// 保存字体设置
+function saveFontSetting() {
+    var settings = {
+        textColor: document.getElementById('textColor').value,
+        textStrokeColor: document.getElementById('textStrokeColor').value
+    };
+    localStorage.setItem('fontSettings', JSON.stringify(settings));
+    applyFontSettings(settings);
+    alert('字体设置已保存！');
+}
+
+// 保存卡片设置
+function saveCardSetting() {
+    var settings = {
+        cardColor: document.getElementById('cardColor').value
+    };
+    localStorage.setItem('cardSettings', JSON.stringify(settings));
+    applyCardSettings(settings);
+    alert('卡片设置已保存！');
+}
+
+// 保存导航栏设置
+function saveNavSetting() {
+    var settings = {
+        navColor: document.getElementById('navColor').value,
+        navTextColor: document.getElementById('navTextColor').value
+    };
+    localStorage.setItem('navSettings', JSON.stringify(settings));
+    applyNavSettings(settings);
+    alert('导航栏设置已保存！');
+}
+
+// 应用背景设置
+function applyBgSettings(settings) {
+    if (settings.bgType === 'color') {
+        document.body.style.backgroundColor = settings.bgColor;
+        document.body.style.backgroundImage = 'none';
+    }
+}
+
+// 应用字体设置
+function applyFontSettings(settings) {
+    var existingStyle = document.getElementById('customFontStyle');
+    if (existingStyle) existingStyle.remove();
+    var style = document.createElement('style');
+    style.id = 'customFontStyle';
+    style.textContent = `
+        h1, h2, h3, h4, h5, h6, p, span, li, td, th, label, strong, small {
+            color: ${settings.textColor} !important;
+            text-shadow: -1px -1px 0 ${settings.textStrokeColor}, 1px -1px 0 ${settings.textStrokeColor}, -1px 1px 0 ${settings.textStrokeColor}, 1px 1px 0 ${settings.textStrokeColor} !important;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// 应用卡片设置
+function applyCardSettings(settings) {
+    document.querySelectorAll('.card').forEach(function(card) {
+        card.style.backgroundColor = settings.cardColor;
+    });
+}
+
+// 应用导航栏设置
+function applyNavSettings(settings) {
+    var navbar = document.querySelector('.navbar');
+    if (navbar) {
+        navbar.style.backgroundColor = settings.navColor;
+    }
+    var navLinks = document.querySelectorAll('.navbar-brand, .nav-link');
+    navLinks.forEach(function(link) {
+        link.style.color = settings.navTextColor;
+    });
+}
+
+// 应用所有设置
+function applyAllSettings() {
+    applyBgSettings(JSON.parse(localStorage.getItem('bgSettings') || '{}'));
+    applyFontSettings(JSON.parse(localStorage.getItem('fontSettings') || '{}'));
+    applyCardSettings(JSON.parse(localStorage.getItem('cardSettings') || '{}'));
+    applyNavSettings(JSON.parse(localStorage.getItem('navSettings') || '{}'));
+}
+
+// 恢复所有默认设置
+function resetAllSettings() {
+    localStorage.removeItem('bgSettings');
+    localStorage.removeItem('fontSettings');
+    localStorage.removeItem('cardSettings');
+    localStorage.removeItem('navSettings');
+    
+    document.getElementById('bgType').value = 'color';
+    document.getElementById('bgColor').value = '#ffffff';
+    document.getElementById('textColor').value = '#000000';
+    document.getElementById('textStrokeColor').value = '#ffffff';
+    document.getElementById('cardColor').value = '#666666';
+    document.getElementById('navColor').value = '#666666';
+    document.getElementById('navTextColor').value = '#000000';
+    
+    toggleBgType();
+    
+    // 清除自定义样式
+    var existingStyle = document.getElementById('customFontStyle');
+    if (existingStyle) existingStyle.remove();
+    
+    // 恢复默认样式
+    document.body.style.backgroundColor = '#ffffff';
+    document.body.style.backgroundImage = 'none';
+    document.querySelector('.navbar').style.backgroundColor = '#666666';
+    document.querySelectorAll('.card').forEach(function(card) {
+        card.style.backgroundColor = '#666666';
+    });
+    
+    alert('已恢复所有默认设置！');
+}
+
+// 页面加载时应用设置
+document.addEventListener('DOMContentLoaded', loadSettings);
+</script>
+{% endblock %}
