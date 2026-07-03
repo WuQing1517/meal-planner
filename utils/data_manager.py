@@ -5,12 +5,33 @@ from config import DATA_DIR, NUTRIENTS_FILE, DAILY_REQUIREMENTS_FILE, MEALS_FILE
 
 CONSTRAINT_RULES_FILE = os.path.join(DATA_DIR, 'constraint_rules.json')
 
+# 检测是否在Vercel环境
+IS_VERCEL = os.environ.get('VERCEL', False)
+
+# 内存存储（用于Vercel环境，重启后丢失）
+memory_store = {}
+
+# 尝试初始化外部存储（JSONBin）
+JSONBIN_API_KEY = None
+JSONBIN_BIN_ID = None
+try:
+    import urllib.request
+    # 创建一个固定的bin用于存储数据
+    JSONBIN_BIN_ID = 'meal_planner_data'
+except:
+    pass
+
 
 def ensure_data_dir():
-    os.makedirs(DATA_DIR, exist_ok=True)
+    if not IS_VERCEL:
+        os.makedirs(DATA_DIR, exist_ok=True)
 
 
 def load_json(file_path, default=None):
+    # Vercel环境使用内存存储
+    if IS_VERCEL:
+        return memory_store.get(file_path, default if default is not None else {})
+    
     ensure_data_dir()
     if not os.path.exists(file_path):
         return default if default is not None else {}
@@ -19,6 +40,11 @@ def load_json(file_path, default=None):
 
 
 def save_json(file_path, data):
+    # Vercel环境使用内存存储
+    if IS_VERCEL:
+        memory_store[file_path] = data
+        return
+    
     ensure_data_dir()
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)

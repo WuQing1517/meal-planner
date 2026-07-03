@@ -123,20 +123,53 @@
             }
         });
 
-        // 检测自定义背景图片
-        function checkCustomBg() {
-            var img = new Image();
-            img.onload = function() {
-                document.documentElement.style.setProperty('--bg-image', 'url(/static/background.jpg?' + new Date().getTime() + ')');
-                document.body.style.backgroundImage = 'url(/static/background.jpg?' + new Date().getTime() + ')';
-            };
-            img.onerror = function() {
-                // 没有自定义背景，使用CSS默认
-                document.body.style.backgroundImage = '';
-            };
-            img.src = '/static/background.jpg?' + new Date().getTime();
+        // 应用保存的颜色设置
+        function applyAllSettings() {
+            // 背景设置
+            var bgSettings = JSON.parse(localStorage.getItem('bgSettings') || '{}');
+            if (bgSettings.bgType === 'color' && bgSettings.bgColor) {
+                document.body.style.backgroundColor = bgSettings.bgColor;
+                document.body.style.backgroundImage = 'none';
+            }
+
+            // 字体设置
+            var fontSettings = JSON.parse(localStorage.getItem('fontSettings') || '{}');
+            if (fontSettings.textColor && fontSettings.textStrokeColor) {
+                var existingStyle = document.getElementById('customFontStyle');
+                if (existingStyle) existingStyle.remove();
+                var style = document.createElement('style');
+                style.id = 'customFontStyle';
+                style.textContent = `
+                    h1, h2, h3, h4, h5, h6, p, span, li, td, th, label, strong, small {
+                        color: ${fontSettings.textColor} !important;
+                        text-shadow: -1px -1px 0 ${fontSettings.textStrokeColor}, 1px -1px 0 ${fontSettings.textStrokeColor}, -1px 1px 0 ${fontSettings.textStrokeColor}, 1px 1px 0 ${fontSettings.textStrokeColor} !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // 卡片设置
+            var cardSettings = JSON.parse(localStorage.getItem('cardSettings') || '{}');
+            if (cardSettings.cardColor) {
+                document.querySelectorAll('.card').forEach(function(card) {
+                    card.style.backgroundColor = cardSettings.cardColor;
+                });
+            }
+
+            // 导航栏设置
+            var navSettings = JSON.parse(localStorage.getItem('navSettings') || '{}');
+            if (navSettings.navColor) {
+                var navbar = document.querySelector('.navbar');
+                if (navbar) navbar.style.backgroundColor = navSettings.navColor;
+            }
+            if (navSettings.navTextColor) {
+                var navLinks = document.querySelectorAll('.navbar-brand, .nav-link');
+                navLinks.forEach(function(link) {
+                    link.style.color = navSettings.navTextColor;
+                });
+            }
         }
-        checkCustomBg();
+        applyAllSettings();
     </script>
     {% block scripts %}{% endblock %}
 </body>
