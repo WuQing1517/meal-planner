@@ -1,164 +1,249 @@
-/* 备餐系统样式 - 黑白灰配色方案 */
+/* 备餐系统样式 - MIUI X 风格 */
+
+/* 全局变量 */
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-card: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --accent-color: #ff6700;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 16px;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #121212;
+        --bg-card: #1e1e1e;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --accent-color: #ff6700;
+        --shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+}
+
+body.dark-mode {
+    --bg-primary: #121212;
+    --bg-card: #1e1e1e;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+}
 
 body {
     font-family: 'MiSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #ffffff;
-    color: #000000;
+    background-color: #f5f5f5;
+    color: #1a1a1a;
     min-height: 100vh;
-    background-image: none !important;
 }
 
-/* 导航栏 - 灰色背景 */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* 导航栏 - MIUI X 风格 */
 .navbar {
-    background-color: #666666 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 12px 0;
 }
 
-.navbar-brand, .nav-link {
-    color: #000000 !important;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #ffffff !important;
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.8) !important;
+    font-weight: 500;
+    margin: 0 8px;
+    padding: 8px 16px !important;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 .nav-link:hover {
-    color: #e0e0e0 !important;
+    color: #ffffff !important;
+    background-color: rgba(255,255,255,0.1);
 }
 
-/* 卡片 - 灰色背景 */
+/* 卡片 - MIUI X 风格 */
 .card {
-    background-color: #666666;
-    border: 1px solid #555555;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-radius: 12px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
 }
 
 .card-header {
-    background-color: #555555;
-    border-bottom: 1px solid #444444;
-    color: #ffffff;
-    border-radius: 12px 12px 0 0 !important;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 16px 20px;
 }
 
 .card-body {
+    padding: 20px;
+}
+
+/* 深色模式卡片 */
+body.dark-mode .card {
+    background-color: #1e1e1e;
+    border-color: #2d2d2d;
+}
+
+body.dark-mode .card-header {
+    background-color: transparent;
+    border-bottom-color: #2d2d2d;
     color: #ffffff;
 }
 
-/* 标题 - 黑色字体白色描边 */
+/* 标题 */
 h1, h2, h3, h4, h5, h6 {
-    color: #000000;
+    color: var(--text-primary);
     font-weight: 600;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
-}
-
-/* 卡片内的文字 - 黑色字体白色描边 */
-.card p, .card span, .card small, .card label {
-    color: #000000;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
-}
-
-/* 卡片标题保持黑色+白色描边 */
-.card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
-    color: #000000;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
 }
 
 /* 表格 */
 .table {
-    color: #000000;
+    color: var(--text-primary);
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .table > :not(caption) > * > * {
-    background-color: #555555;
-    color: #ffffff;
+    background-color: transparent;
+    color: var(--text-primary);
 }
 
 .table thead th {
-    background-color: #444444;
-    color: #ffffff;
-    font-weight: 600;
+    background-color: rgba(0,0,0,0.02);
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body.dark-mode .table thead th {
+    background-color: rgba(255,255,255,0.05);
+    color: var(--text-secondary);
 }
 
 /* 表单 */
 .form-control, .form-select {
-    background-color: #ffffff;
-    border-color: #d0d0d0;
-    color: #000000;
-    border-radius: 8px;
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    color: var(--text-primary);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #ffffff;
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: #000000;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(255,103,0,0.1);
 }
 
 .form-label {
-    color: #ffffff;
+    color: var(--text-primary);
     font-weight: 500;
+    margin-bottom: 8px;
 }
 
-/* 按钮 */
+/* 按钮 - MIUI X 风格 */
 .btn {
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 500;
+    padding: 10px 24px;
+    transition: all 0.3s ease;
+    border: none;
 }
 
 .btn-primary {
-    background-color: #333333;
-    border: none;
+    background: linear-gradient(135deg, #000000 0%, #333333 100%);
     color: #ffffff;
 }
 
 .btn-primary:hover {
-    background-color: #444444;
+    background: linear-gradient(135deg, #333333 0%, #555555 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .btn-success {
-    background-color: #444444;
-    border: none;
+    background: linear-gradient(135deg, #34c759 0%, #30b350 100%);
     color: #ffffff;
 }
 
+.btn-success:hover {
+    background: linear-gradient(135deg, #30b350 0%, #28a745 100%);
+    transform: translateY(-1px);
+}
+
 .btn-danger {
-    background-color: #333333;
+    background: linear-gradient(135deg, #ff3b30 0%, #ff2d55 100%);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: var(--text-primary);
     border: none;
+}
+
+body.dark-mode .btn-secondary {
+    background-color: #3a3a3a;
     color: #ffffff;
 }
 
 /* 徽章 */
 .badge {
     font-weight: 500;
-    border-radius: 6px;
-    padding: 4px 10px;
+    padding: 6px 12px;
+    border-radius: 8px;
 }
 
 /* 模态框 */
 .modal-content {
-    background-color: #666666;
-    color: #ffffff;
-    border-radius: 12px;
+    background-color: #ffffff;
+    color: var(--text-primary);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .modal-content {
+    background-color: #1e1e1e;
 }
 
 .modal-header {
-    background-color: #555555;
-    border-bottom-color: #444444;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 20px 24px;
 }
 
 .modal-title {
-    color: #ffffff;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 24px;
 }
 
 .btn-close {
@@ -167,74 +252,111 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 列表 */
 .list-group-item {
-    background-color: #666666;
-    border-color: #555555;
-    color: #ffffff;
+    background-color: transparent;
+    border-color: rgba(0,0,0,0.05);
+    color: var(--text-primary);
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+body.dark-mode .list-group-item {
+    border-color: #2d2d2d;
 }
 
 /* 提示框 */
 .alert {
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
 }
 
 .alert-info {
-    background-color: #666666;
-    color: #ffffff;
+    background-color: rgba(0,123,255,0.1);
+    color: #0066cc;
 }
 
 .alert-warning {
-    background-color: #555555;
-    color: #ffffff;
+    background-color: rgba(255,193,7,0.1);
+    color: #cc8800;
 }
 
 .alert-success {
-    background-color: #555555;
-    color: #ffffff;
+    background-color: rgba(40,167,69,0.1);
+    color: #1a8c1a;
+}
+
+body.dark-mode .alert-info {
+    background-color: rgba(91,192,222,0.15);
+    color: #5bc0de;
+}
+
+body.dark-mode .alert-warning {
+    background-color: rgba(255,193,7,0.15);
+    color: #ffc107;
+}
+
+body.dark-mode .alert-success {
+    background-color: rgba(40,167,69,0.15);
+    color: #28a745;
 }
 
 /* 首页介绍卡片 */
 .jumbotron {
-    background-color: #666666;
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #333333 100%);
     color: #ffffff;
-    border-radius: 16px;
+    border-radius: 24px;
+    padding: 40px;
 }
 
 .jumbotron h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #000000;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
+    color: #ffffff;
+    margin-bottom: 12px;
 }
 
 .jumbotron .lead {
-    font-size: 1.2rem;
-    color: #ffffff;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8);
 }
 
 .jumbotron hr {
-    border-color: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.2);
+}
+
+body.dark-mode .jumbotron {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2a2a2a 100%);
 }
 
 /* 食品列表 */
 .food-list {
-    border: 1px solid #555555;
-    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
     padding: 12px;
-    background-color: #666666;
+    background-color: #f8f8f8;
+}
+
+body.dark-mode .food-list {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
 }
 
 .food-list .form-check {
-    padding: 8px 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.food-list .form-check:hover {
+    background-color: rgba(0,0,0,0.03);
+}
+
+body.dark-mode .food-list .form-check:hover {
+    background-color: rgba(255,255,255,0.05);
 }
 
 /* 生成结果 */
 #resultContainer .card {
-    border-left: 4px solid #333333;
+    border-left: 4px solid var(--accent-color);
 }
 
 /* 输入框占位符 */
@@ -244,48 +366,100 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 链接 */
 a {
-    color: #ffffff;
+    color: var(--accent-color);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #e0e0e0;
-    text-decoration: underline;
+    color: #e55a00;
 }
 
 /* 导航标签 */
 .nav-tabs .nav-link {
-    color: #ffffff;
-    border-color: #555555;
+    color: var(--text-secondary);
+    border-color: transparent;
+    border-radius: 8px 8px 0 0;
 }
 
 .nav-tabs .nav-link.active {
-    background-color: #666666;
-    color: #ffffff;
-    border-color: #555555;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: #e0e0e0;
+    border-bottom-color: var(--bg-card);
+}
+
+body.dark-mode .nav-tabs .nav-link.active {
+    border-color: #3a3a3a;
+    border-bottom-color: #1e1e1e;
 }
 
 /* 文字 */
 .text-muted {
-    color: #cccccc !important;
+    color: var(--text-secondary) !important;
 }
 
-/* 文字颜色 - 默认黑色 */
-p, span, li, td, th, label, strong, small {
-    color: #000000;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
+/* 输入框样式 */
+.input-group-text {
+    background-color: #f0f0f0;
+    border-color: #e0e0e0;
+    color: var(--text-secondary);
 }
 
-/* 标题黑色 */
-h1, h2, h3, h4, h5, h6 {
-    color: #000000;
-    text-shadow: 
-        -1px -1px 0 #ffffff,
-        1px -1px 0 #ffffff,
-        -1px 1px 0 #ffffff,
-        1px 1px 0 #ffffff;
+body.dark-mode .input-group-text {
+    background-color: #3a3a3a;
+    border-color: #4a4a4a;
+    color: var(--text-secondary);
+}
+
+/* 下拉菜单 */
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 36px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .jumbotron h1 {
+        font-size: 1.8rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .card-body .row .col-md-3 {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #777;
 }
