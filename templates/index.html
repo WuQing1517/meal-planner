@@ -5,27 +5,31 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <div class="jumbotron p-5 rounded position-relative">
-            <div class="position-absolute top-0 end-0 p-3 text-end">
-                <div style="font-size: 2.5rem; font-weight: 700;" id="currentTime"></div>
-                <div class="lead" id="currentDate"></div>
-                <div class="h5" id="currentWeekday"></div>
-                <!-- 每日许愿入口 -->
-                <div class="mt-3">
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" id="wishInput" placeholder="写下今天的愿望..." style="max-width: 250px;">
-                        <button class="btn btn-light" onclick="saveWish()">许愿</button>
-                    </div>
-                    <div id="todayWish" class="mt-2" style="display: none;">
-                        <small>今日愿望：</small>
-                        <span id="savedWishText" class="fw-bold"></span>
+        <div class="card mb-4" style="background: rgba(173, 216, 230, 0.15); border: 1px solid rgba(173, 216, 230, 0.3);">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="display-5 mb-0">小金的食谱</h1>
+                    <div class="text-end">
+                        <div class="time-display" id="currentTime"></div>
+                        <div class="date-display" id="currentDate"></div>
+                        <div class="weekday-display" id="currentWeekday"></div>
                     </div>
                 </div>
+                <hr class="my-3">
+                <div class="d-flex justify-content-end align-items-center" style="gap: 8px;">
+                    <input type="text" class="form-control" id="wishInput" placeholder="写下今天的愿望..." style="flex: 1; max-width: 250px; border-radius: 8px;">
+                    <button class="btn btn-primary" onclick="saveWish()" style="border-radius: 8px; padding: 10px 20px; display: flex; align-items: center; gap: 6px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.936l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.064A2 2 0 0 0 14.063 15.5l-1.582 6.135a.5.5 0 0 1-.962 0L9.937 15.5z"></path>
+                        </svg>
+                        许愿
+                    </button>
+                </div>
+                <div id="todayWish" class="mt-2" style="display: none;">
+                    <small class="text-muted">今日愿望：</small>
+                    <span id="savedWishText" class="fw-bold"></span>
+                </div>
             </div>
-            <h1 class="display-4">备餐系统</h1>
-            <p class="lead">智能营养配比，科学规划每一餐</p>
-            <hr class="my-4">
-            <p>通过线性规划算法，自动计算最优食品配比，满足您的每日营养需求。</p>
         </div>
     </div>
 </div>
@@ -93,11 +97,11 @@
 <!-- 许愿反馈模态框 -->
 <div class="modal fade" id="feedbackModal" tabindex="-1">
     <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 15px; border: none;">
-            <div class="modal-body text-center py-4">
-                <div style="font-size: 3rem;">✨</div>
-                <h5 class="text-success mb-2">许愿成功！</h5>
-                <p class="mb-0" id="feedbackWishText" style="white-space: pre-line;"></p>
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div style="font-size: 3rem; margin-bottom: 16px;">✨</div>
+                <h5 class="mb-3">许愿成功！</h5>
+                <p class="mb-0 text-muted" id="feedbackWishText"></p>
             </div>
         </div>
     </div>
@@ -106,33 +110,36 @@
 <!-- 隐藏的抽奖转盘界面 -->
 <div class="modal fade" id="secretModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
-            <div class="modal-body text-center text-white p-5">
-                <h2 class="mb-4">🎉 恭喜小金同学触发彩蛋啦！</h2>
-                <p class="lead mb-4">点击转盘抽取你的专属奖励</p>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">🎉 恭喜小金同学触发彩蛋啦！</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <p class="text-muted mb-4">点击转盘抽取你的专属奖励</p>
                 
                 <!-- 转盘 -->
                 <div class="position-relative d-inline-block mb-4">
-                    <div id="wheel" style="width: 300px; height: 300px; border-radius: 50%; background: conic-gradient(#ff6b6b 0% 16.67%, #feca57 16.67% 33.33%, #48dbfb 33.33% 50%, #ff9ff3 50% 66.67%, #54a0ff 66.67% 83.33%, #5f27cd 83.33% 100%); display: flex; align-items: center; justify-content: center; transition: transform 3s ease-out;">
-                        <div style="width: 80px; height: 80px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎡</div>
+                    <div id="wheel" style="width: 280px; height: 280px; border-radius: 50%; background: conic-gradient(#ff6b6b 0% 16.67%, #feca57 16.67% 33.33%, #48dbfb 33.33% 50%, #ff9ff3 50% 66.67%, #54a0ff 66.67% 83.33%, #5f27cd 83.33% 100%); display: flex; align-items: center; justify-content: center; transition: transform 3s ease-out; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                        <div style="width: 70px; height: 70px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">🎡</div>
                     </div>
                     <!-- 指针 -->
-                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #fff;"></div>
+                    <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 24px solid #fff; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));"></div>
                 </div>
                 
                 <!-- 奖品区域 -->
                 <div id="prizeResult" style="display: none;" class="mt-4">
-                    <div class="card" style="background: rgba(255,255,255,0.95); border: none;">
-                        <div class="card-body text-dark">
-                            <h3 id="prizeText" class="text-success mb-3"></h3>
-                            <p id="prizeDesc" class="mb-3"></p>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h3 id="prizeText" class="mb-3"></h3>
+                            <p id="prizeDesc" class="text-muted mb-3"></p>
                             <p class="text-muted small mb-3">友情提示：兑换需保存愿望+奖券截图才可以兑换哦</p>
                             <button class="btn btn-primary" data-bs-dismiss="modal">太棒了！</button>
                         </div>
                     </div>
                 </div>
                 
-                <button id="spinBtn" class="btn btn-warning btn-lg mt-3" onclick="spinWheel()">开始抽奖</button>
+                <button id="spinBtn" class="btn btn-primary btn-lg mt-4" onclick="spinWheel()">开始抽奖</button>
             </div>
         </div>
     </div>
