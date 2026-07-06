@@ -12,30 +12,30 @@
     </div>
     <div class="card-body">
         <form method="POST" action="{{ url_for('foods_add') }}" id="addFoodForm">
-            <div class="row mb-2">
-                <div class="col-md-3 mb-2">
+            <div class="mb-2" style="display: flex; gap: 12px; align-items: flex-end;">
+                <div style="flex: 2;">
                     <label class="form-label small">食品名称</label>
                     <input type="text" class="form-control form-control-sm" name="name" required>
                 </div>
-                <div class="col-md-3 mb-2">
+                <div style="flex: 1;">
                     <label class="form-label small">优先级</label>
                     <input type="number" class="form-control form-control-sm" name="priority" value="1" min="1" max="10">
                 </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label small">分类</label>
-                    <div class="d-flex align-items-center justify-content-between" style="gap: 8px;">
-                        <div id="categorySelectWrapper">
-                            <select class="form-select form-select-sm" name="category" id="addCategorySelect" style="min-width: 160px; width: auto;">
-                                {% for cat in categories %}
-                                <option value="{{ cat }}">{{ cat }}</option>
-                                {% endfor %}
-                                <option value="__new__">+ 新建</option>
-                            </select>
-                        </div>
-                        <div id="newCategoryInput" style="display: none;">
-                            <input type="text" class="form-control form-control-sm" id="addNewCategory" placeholder="新分类名称" style="width: 160px;">
-                        </div>
-                        <span class="text-muted small">自动分类: <span id="addAutoCategory" class="badge bg-secondary">-</span></span>
+                <div style="flex: 2;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                        <label class="form-label small mb-0">分类</label>
+                        <span class="badge bg-secondary" id="addAutoCategory">自动分类: -</span>
+                    </div>
+                    <div id="categorySelectWrapper">
+                        <select class="form-select form-select-sm" name="category" id="addCategorySelect" style="width: 100%;">
+                            {% for cat in categories %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                            <option value="__new__">+ 新建</option>
+                        </select>
+                    </div>
+                    <div id="newCategoryInput" style="display: none;">
+                        <input type="text" class="form-control form-control-sm" id="addNewCategory" placeholder="新分类名称">
                     </div>
                 </div>
             </div>
