@@ -56,6 +56,15 @@
     <div class="col-md-4 mb-4">
         <div class="card h-100">
             <div class="card-body d-flex flex-column">
+                <h5 class="card-title">约束规则</h5>
+                <p class="card-text flex-grow-1">配置营养物质的约束类型和优先级排序。</p>
+                <a href="{{ url_for('constraint_rules') }}" class="btn btn-primary mt-auto">进入配置</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
                 <h5 class="card-title">餐数配置</h5>
                 <p class="card-text flex-grow-1">配置不同的餐数方案，如3餐制、4餐制等。</p>
                 <a href="{{ url_for('meals_list') }}" class="btn btn-primary mt-auto">进入配置</a>
