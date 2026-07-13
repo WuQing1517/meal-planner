@@ -152,7 +152,7 @@ def get_foods():
     return data.get("foods", [])
 
 
-def add_food(name, category, nutrition_per_100g, priority=1):
+def add_food(name, category, nutrition_per_100g, priority=1, stock=0, stock_limit='unlimited'):
     foods = get_foods()
     food = {
         "id": generate_id(),
@@ -160,14 +160,16 @@ def add_food(name, category, nutrition_per_100g, priority=1):
         "category": category,
         "unit": "g",
         "priority": priority,
-        "nutrition_per_100g": nutrition_per_100g
+        "nutrition_per_100g": nutrition_per_100g,
+        "stock": stock,
+        "stock_limit": stock_limit
     }
     foods.append(food)
     save_json(FOODS_FILE, {"foods": foods})
     return food
 
 
-def update_food(food_id, name, category, nutrition_per_100g, priority=1):
+def update_food(food_id, name, category, nutrition_per_100g, priority=1, stock=0, stock_limit='unlimited'):
     foods = get_foods()
     for f in foods:
         if f["id"] == food_id:
@@ -175,6 +177,8 @@ def update_food(food_id, name, category, nutrition_per_100g, priority=1):
             f["category"] = category
             f["nutrition_per_100g"] = nutrition_per_100g
             f["priority"] = priority
+            f["stock"] = stock
+            f["stock_limit"] = stock_limit
             save_json(FOODS_FILE, {"foods": foods})
             return f
     return None

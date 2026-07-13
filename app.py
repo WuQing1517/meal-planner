@@ -521,6 +521,8 @@ def foods_add():
     name = request.form.get('name')
     priority = int(request.form.get('priority', 1))
     category = request.form.get('category', '')
+    stock_limit = request.form.get('stock_limit', 'unlimited')
+    stock = int(request.form.get('stock', 0)) if stock_limit == 'limited' else 0
     nutrients = get_nutrients()
 
     nutrition_per_100g = {}
@@ -534,7 +536,7 @@ def foods_add():
         category = auto_categorize_food(nutrition_per_100g)
 
     if name:
-        add_food(name, category, nutrition_per_100g, priority)
+        add_food(name, category, nutrition_per_100g, priority, stock, stock_limit)
     return redirect(url_for('foods_list'))
 
 
@@ -543,6 +545,8 @@ def foods_edit(food_id):
     name = request.form.get('name')
     priority = int(request.form.get('priority', 1))
     category = request.form.get('category', '')
+    stock_limit = request.form.get('stock_limit', 'unlimited')
+    stock = int(request.form.get('stock', 0)) if stock_limit == 'limited' else 0
     nutrients = get_nutrients()
 
     nutrition_per_100g = {}
@@ -556,7 +560,7 @@ def foods_edit(food_id):
         category = auto_categorize_food(nutrition_per_100g)
 
     if name:
-        update_food(food_id, name, category, nutrition_per_100g, priority)
+        update_food(food_id, name, category, nutrition_per_100g, priority, stock, stock_limit)
     return redirect(url_for('foods_list'))
 
 

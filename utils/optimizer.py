@@ -179,6 +179,22 @@ def optimize_meal_plan(foods, daily_requirements, meal_plan, mix_ratios=None, co
         if remaining > 0 and daily_sum:
             prob += lpSum(daily_sum) >= remaining
 
+    # 库存约束：每种食品的使用量不能超过库存
+    for food in foods:
+        stock_limit = food.get("stock_limit", "unlimited")
+        stock = food.get("stock", 0)
+        
+        if stock_limit == "limited" and stock > 0:
+            # 限量食品，使用量不能超过库存（以100g为单位）
+            stock_in_100g = stock / 100  # 将g转换为100g单位
+            food_sum = []
+            for meal_id in food_vars:
+                if food["id"] in food_vars[meal_id]:
+                    food_sum.append(food_vars[meal_id][food["id"]])
+            
+            if food_sum:
+                prob += lpSum(food_sum) <= stock_in_100g
+
     prob.solve()
 
     if LpStatus[prob.status] != "Optimal":

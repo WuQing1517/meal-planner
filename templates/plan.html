@@ -43,10 +43,19 @@
                                value="{{ food.id }}" id="food_{{ food.id }}"
                                data-category="{{ food.category }}" data-name="{{ food.name }}"
                                data-priority="{{ food.priority if food.priority is defined else 1 }}"
+                               data-stock="{{ food.stock if food.stock is defined else 0 }}"
+                               data-stock-limit="{{ food.stock_limit if food.stock_limit is defined else 'unlimited' }}"
                                onchange="updateCategoryMix()">
                         <label class="form-check-label" for="food_{{ food.id }}">
                             {{ food.name }} ({{ food.category }})
                             <span class="badge bg-secondary ms-1">P{{ food.priority if food.priority is defined else 1 }}</span>
+                            {% if food.stock_limit is defined and food.stock_limit == 'unlimited' %}
+                                <span class="badge bg-info ms-1">不限量</span>
+                            {% elif food.stock is defined and food.stock > 0 %}
+                                <span class="badge bg-success ms-1">库存: {{ food.stock }}g</span>
+                            {% else %}
+                                <span class="badge bg-danger ms-1">库存不足</span>
+                            {% endif %}
                         </label>
                     </div>
                     {% endfor %}
