@@ -306,8 +306,15 @@ def daily_requirements_save():
     for nutrient in nutrients:
         nid = nutrient['id']
         min_val = request.form.get(f'{nid}_min')
+        up_val = request.form.get(f'{nid}_up', '0')
+        down_val = request.form.get(f'{nid}_down', '0')
+        priority = request.form.get(f'{nid}_priority', 'medium')
+        
         requirements[nid] = {
-            "min": float(min_val) if min_val else None
+            "min": float(min_val) if min_val else None,
+            "up": int(up_val) if up_val else 0,
+            "down": int(down_val) if down_val else 0,
+            "priority": priority
         }
     save_daily_requirements(requirements)
     return redirect(url_for('daily_requirements'))

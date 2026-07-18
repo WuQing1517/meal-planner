@@ -127,8 +127,14 @@ def optimize_meal_plan(foods, daily_requirements, meal_plan, mix_ratios=None, co
             up_percent = c.get("up", 0)
             down_percent = c.get("down", 0)
 
-            min_val = base_value * (1 - down_percent / 100) if base_value and down_percent else None
-            max_val = base_value * (1 + up_percent / 100) if base_value and up_percent else None
+            # 计算最小值和最大值
+            # 如果有基础值，就计算约束范围
+            if base_value and base_value > 0:
+                min_val = base_value * (1 - down_percent / 100) if down_percent > 0 else base_value
+                max_val = base_value * (1 + up_percent / 100) if up_percent > 0 else base_value
+            else:
+                min_val = None
+                max_val = None
 
             rule = constraint_rules.get(nutrient_id, {})
             hard_exceed = rule.get("hard_exceed", False)

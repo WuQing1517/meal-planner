@@ -7,32 +7,55 @@
 
 <div class="card">
     <div class="card-header">
-        <h5>设置每日最低营养需求（必须满足）</h5>
+        <h5>设置每日营养需求</h5>
     </div>
     <div class="card-body">
         {% if nutrients %}
         <form method="POST" action="{{ url_for('daily_requirements_save') }}">
-            <div class="alert alert-warning">
-                <strong>说明：</strong>每日需求是全天总量的最低要求，必须满足。每餐的约束类型和优先级在"餐数配置"中设置。
+            <div class="alert alert-info">
+                <strong>说明：</strong>设置每日各种营养物质的基础值和上下浮动范围。系统会根据这些需求生成配比方案。
             </div>
             <table class="table">
                 <thead>
                     <tr>
                         <th>营养物质</th>
                         <th>单位</th>
-                        <th>每日最低需求</th>
+                        <th>基础值</th>
+                        <th>上浮(%)</th>
+                        <th>下浮(%)</th>
+                        <th>优先级</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for nutrient in nutrients %}
+                    {% set req = requirements.get(nutrient.id, {}) %}
                     <tr>
                         <td>{{ nutrient.name }}</td>
                         <td>{{ nutrient.unit }}</td>
                         <td>
                             <input type="number" class="form-control"
                                    name="{{ nutrient.id }}_min"
-                                   value="{{ requirements.get(nutrient.id, {}).get('min', '') }}"
-                                   step="0.1" min="0" placeholder="输入每日最低需求量">
+                                   value="{{ req.get('min', '') }}"
+                                   step="0.1" min="0" placeholder="基础值">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control"
+                                   name="{{ nutrient.id }}_up"
+                                   value="{{ req.get('up', 0) }}"
+                                   step="1" min="0" max="100" placeholder="%">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control"
+                                   name="{{ nutrient.id }}_down"
+                                   value="{{ req.get('down', 0) }}"
+                                   step="1" min="0" max="100" placeholder="%">
+                        </td>
+                        <td>
+                            <select class="form-select" name="{{ nutrient.id }}_priority">
+                                <option value="high" {% if req.get('priority') == 'high' %}selected{% endif %}>高</option>
+                                <option value="medium" {% if req.get('priority') == 'medium' or not req.get('priority') %}selected{% endif %}>中</option>
+                                <option value="low" {% if req.get('priority') == 'low' %}selected{% endif %}>低</option>
+                            </select>
                         </td>
                     </tr>
                     {% endfor %}
@@ -57,7 +80,10 @@
             <thead>
                 <tr>
                     <th>营养物质</th>
-                    <th>每日最低需求</th>
+                    <th>基础值</th>
+                    <th>上浮</th>
+                    <th>下浮</th>
+                    <th>优先级</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +92,12 @@
                 <tr>
                     <td>{{ nutrient.name }}</td>
                     <td>{{ req.get('min', '-') }} {{ nutrient.unit }}</td>
+                    <td>{{ req.get('up', 0) }}%</td>
+                    <td>{{ req.get('down', 0) }}%</td>
+                    <td>
+                        {% set priority = req.get('priority', 'medium') %}
+                        {% if priority == 'high' %}高{% elif priority == 'low' %}低{% else %}中{% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
