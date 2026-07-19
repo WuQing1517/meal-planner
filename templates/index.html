@@ -125,6 +125,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center py-4">
+                <div class="mb-3">
+                    <span class="text-muted">许愿内容：</span>
+                    <span id="modalWishText" class="fw-bold"></span>
+                </div>
+                <div class="mb-3">
+                    <span class="text-muted">抽奖时间：</span>
+                    <span id="modalSpinTime" class="text-muted"></span>
+                </div>
+                <div class="alert alert-warning py-2 px-3 mb-3" style="font-size: 0.85rem;">温馨提示：仅明确是愿望才生效奖品！！！，仅输入关键词不生效</div>
                 <p class="text-muted mb-4">点击转盘抽取你的专属奖励</p>
                 
                 <!-- 转盘 -->
@@ -235,20 +244,20 @@ function saveWish() {
         console.log('许愿保存失败:', err);
     });
 
-    // 检测彩蛋：黄祖斌
-    if (wish.includes('黄祖斌')) {
+    // 检测彩蛋关键词
+    if (wish.includes('黄祖斌') || wish.includes('老公') || wish.includes('崽崽') || wish.includes('未来')) {
         // 检查是否是重复的愿望（已经触发过菜单）
-        var triggeredWishes = JSON.parse(localStorage.getItem('triggeredSecretWishes_' + today) || '[]');
+        var triggeredWishes = JSON.parse(localStorage.getItem('triggeredSecretWishes') || '[]');
         
         if (triggeredWishes.includes(wish)) {
-            // 重复的愿望，只给正向反馈，不触发菜单
+            // 重复的愿望，永久不再触发，只给正向反馈
             getWishFeedback(wish);
         } else if (canTriggerSecretToday()) {
             // 新的愿望，触发菜单
             triggeredWishes.push(wish);
-            localStorage.setItem('triggeredSecretWishes_' + today, JSON.stringify(triggeredWishes));
+            localStorage.setItem('triggeredSecretWishes', JSON.stringify(triggeredWishes));
             saveSecretTriggeredToday();
-            showSecretModal();
+            showSecretModal(wish, timeStr);
         } else {
             // 今天已经触发过菜单，只给正向反馈
             getWishFeedback(wish);
@@ -273,11 +282,15 @@ function saveSecretTriggeredToday() {
 }
 
 // 显示隐藏的抽奖转盘界面
-function showSecretModal() {
+function showSecretModal(wishText, spinTime) {
     // 重置转盘和按钮
     document.getElementById('wheel').style.transform = 'rotate(0deg)';
     document.getElementById('prizeResult').style.display = 'none';
     document.getElementById('spinBtn').style.display = 'inline-block';
+    
+    // 显示许愿内容和抽奖时间
+    document.getElementById('modalWishText').textContent = wishText || '';
+    document.getElementById('modalSpinTime').textContent = spinTime || '';
     
     var modal = new bootstrap.Modal(document.getElementById('secretModal'));
     modal.show();
